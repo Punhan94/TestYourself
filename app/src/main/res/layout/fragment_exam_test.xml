@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="20dp"
+    tools:context=".presentation.ui.fragments.user_fragments.exam_test.ExamTestFragment">
+
+    <TextView
+        android:id="@+id/exam_test_num_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Test "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/exam_test_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        app:layout_constraintStart_toEndOf="@id/exam_test_num_text"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        />
+
+
+    <TextView
+        android:id="@+id/exam_test_time_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:text="Saniyə :"
+        android:layout_marginRight="5dp"
+        app:layout_constraintEnd_toStartOf="@id/exam_test_time"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/exam_test_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:textSize="22sp"
+        android:text="30"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+
+    <ImageView
+        android:id="@+id/exam_test_img"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_launcher_round"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/exam_test_num"
+        android:layout_marginVertical="15dp"
+        />
+
+    <TextView
+        android:id="@+id/exam_test_question"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:text="Burada test suali olacaqdir"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/exam_test_img"
+        />
+
+    <RadioGroup
+        android:id="@+id/radioGroup2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/exam_test_question">
+
+        <RadioButton
+            android:id="@+id/radioGroup2_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:background="@color/purple_700"
+            android:text="ilk cavab"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            />
+
+        <RadioButton
+            android:id="@+id/radioGroup2_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:background="@color/purple_700"
+            android:text="ikinci cavab"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            />
+
+        <RadioButton
+            android:id="@+id/radioGroup2_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:background="@color/purple_700"
+            android:text="ucuncu cavab"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            />
+
+        <RadioButton
+            android:id="@+id/radioGroup2_4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="5dp"
+            android:background="@color/purple_700"
+            android:text="dorduncu cavab"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            />
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/aciq_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Buraya aciq testin cavabi qeyd edilecekdir"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup2"
+        />
+
+    <Button
+        android:id="@+id/answer_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="tesdiqle"
+        android:layout_marginTop="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/aciq_test"
+         />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

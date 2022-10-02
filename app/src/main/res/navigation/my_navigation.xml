@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/my_navigation"
+    app:startDestination="@id/firstShowFragment">
+
+    <fragment
+        android:id="@+id/loginOrSignUpFragment"
+        android:name="com.example.testyourself.presentation.ui.fragments.login.LoginOrSignUpFragment"
+        android:label="fragment_login_or_sign_up"
+        tools:layout="@layout/fragment_login_or_sign_in" >
+        <action
+            android:id="@+id/action_loginOrSignUpFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
+        <action
+            android:id="@+id/action_loginOrSignUpFragment_to_teacherHomeFragment"
+            app:destination="@id/teacherHomeFragment" />
+        <action
+            android:id="@+id/action_loginOrSignUpFragment_to_studentHomeFragment"
+            app:destination="@id/studentHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/onBoardingFragment2"
+        android:name="com.example.testyourself.presentation.ui.fragments.onboarding.OnBoardingFragment"
+        android:label="fragment_on_boarding"
+        tools:layout="@layout/fragment_on_boarding" >
+        <action
+            android:id="@+id/action_onBoardingFragment2_to_loginOrSignUpFragment"
+            app:destination="@id/loginOrSignUpFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/firstShowFragment"
+        android:name="com.example.testyourself.presentation.ui.fragments.splash.SplashFragment"
+        android:label="fragment_first_show"
+        tools:layout="@layout/fragment_slapsh" >
+        <action
+            android:id="@+id/action_splashFragment_to_loginOrSignUpFragment"
+            app:destination="@id/loginOrSignUpFragment" />
+        <action
+            android:id="@+id/action_splashFragment_to_onBoardingFragment2"
+            app:destination="@id/onBoardingFragment2" />
+        <action
+            android:id="@+id/action_firstShowFragment_to_studentHomeFragment"
+            app:destination="@id/studentHomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.example.testyourself.presentation.ui.fragments.login.ForgotPasswordFragment"
+        android:label="fragment_forgot_password"
+        tools:layout="@layout/fragment_forgot_password" >
+
+    </fragment>
+    <fragment
+        android:id="@+id/teacherHomeFragment"
+        android:name="com.example.testyourself.presentation.ui.fragments.TeacherHomeFragment"
+        android:label="fragment_teacher_home"
+        tools:layout="@layout/fragment_teacher_home" />
+    <fragment
+        android:id="@+id/studentHomeFragment"
+        android:name="com.example.testyourself.presentation.ui.fragments.StudentHomeFragment"
+        android:label="fragment_student_home"
+        tools:layout="@layout/fragment_student_home" />
+    <include app:graph="@navigation/user_navigation" />
+
+</navigation>

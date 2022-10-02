@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/change_form.xml" value="0.1605" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/gradient_2.xml" value="0.1425" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/gradient_3.xml" value="0.1425" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/ic_baseline_exit_to_app_24.xml" value="0.1435" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/ic_baseline_manage_accounts_24.xml" value="0.135" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/ic_baseline_menu_.xml" value="0.1435" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/input_bacground.xml" value="0.1605" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_exam_list.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_exam_test.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_first_show.xml" value="0.1685185185185185" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_first_splash.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_forgot_password.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_login_or_sign_in.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_login_or_sign_up.xml" value="0.264" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_main_on_boarding.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_on_boarding.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_result.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_second_onboarding.xml" value="0.1" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_second_splash.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_slapsh.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_student_home.xml" value="0.2" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_teacher_home.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_user_detail.xml" value="0.2359375" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_user_home.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_user_profile.xml" value="0.2" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/header_menu.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/lesson_item.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/menu/user_menu.xml" value="0.18671875" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

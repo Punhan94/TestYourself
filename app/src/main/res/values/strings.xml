@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Test Yourself</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="first_show_fragment_hello">Test yourself proqramına xoş gəldiniz</string>
+    <string name="login">Giriş</string>
+    <string name="resgiter">Qeydiyyat</string>
+    <string name="name">Emailinizi daxil edin</string>
+    <string name="password">Şifrənizi daxil edin</string>
+    <string name="password_repeat">Şifrənizi təkrar yazın</string>
+    <string name="login_button">Daxil ol</string>
+    <string name="register_button">Təsdiqlə</string>
+    <string name="forgot_password">Şifrəmi unutdum</string>
+    <string name="first_slide_header">Gənc müəllimlərimizi yeni suallar tərtib edərək ölkə gəncləri üçün sualları əlçanat etməyə dəvət edirik</string>
+    <string name="second_slide_header">Artıq öz biliklərinizi istənilən yerdə və istənilən zaman test edə biləcəksiniz</string>
+    <string name="finished_OnBoarding_btn">Başla</string>
+    <string name="student">Şagird</string>
+    <string name="teacher">Müəllim</string>
+    <string name="new_exam">Yeni sınaq</string>
+    <string name="student_group">Gruplara</string>
+    <string name="result_exams">Nəticələri</string>
+    <string name="open">Ac</string>
+    <string name="close">Bagla</string>
+    <string name="home">Əsas</string>
+    <string name="news">Bildiriş</string>
+    <string name="user_profile">İstifadəçi səhifəsi</string>
+    <string name="exit">Çıxış</string>
+    <string name="all_true_answers">Ümumi düzgün cavab :</string>
+    <string name="all_false_answers">Ümumi səhv cavab :</string>
+    <string name="all_null_answers">Ümumi boş cavab :</string>
+    <string name="full_name">Ad Soyad</string>
+    <string name="first_name">Ad</string>
+    <string name="last_name">Soyad</string>
+    <string name="age">18</string>
+    <string name="confirm">Təsdiq</string>
+    <string name="cancel">Ləğv</string>
+
+
+</resources>
