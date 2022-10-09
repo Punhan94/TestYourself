@@ -1,16 +1,25 @@
 package com.example.testyourself.presentation.ui.fragments.user_fragments
 
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
-import com.example.testyourself.R
 import com.example.testyourself.data.models.ExamResult
 import com.example.testyourself.data.models.UserProfile
 import com.example.testyourself.data.repository.ApiRepository
@@ -19,12 +28,16 @@ import com.example.testyourself.presentation.viewmodels.UserProfileViewModel
 import com.example.testyourself.presentation.viewmodels.UserProfileViewModelProviderFactory
 import com.example.testyourself.utils.Constant
 import com.google.firebase.auth.FirebaseAuth
+import java.util.jar.Manifest
 
 class UserProfileFragment : Fragment() {
     private var _binding: FragmentUserProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: UserProfileViewModel
     lateinit var authFirebase : FirebaseAuth
+    lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
+    var imageUri : Uri? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +61,7 @@ class UserProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeLiveData()
+        registerActivityForResult()
         binding.manageUser.setOnClickListener {
             userDetailShow(true)
         }
@@ -56,7 +70,17 @@ class UserProfileFragment : Fragment() {
         }
         binding.userProfileDetailBtn.setOnClickListener {
             userProfilePost()
+            observeLiveData()
+            userDetailShow(false)
         }
+        binding.profileUserImage.setOnClickListener {
+            chooseImage()
+        }
+        binding.swipeRefreshLayoutUserProfile.setOnRefreshListener {
+            observeLiveData()
+            binding.swipeRefreshLayoutUserProfile.isRefreshing = false
+        }
+
     }
 
     override fun onDestroyView() {
@@ -64,6 +88,48 @@ class UserProfileFragment : Fragment() {
         _binding = null
     }
 
+    fun chooseImage(){
+        if(ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),1)
+        }else{
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            activityResultLauncher.launch(intent)
+        }
+
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 1 && grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            val intent = Intent()
+            intent.type = "image/*"
+            intent.action = Intent.ACTION_GET_CONTENT
+            activityResultLauncher.launch(intent)
+        }
+    }
+
+    fun registerActivityForResult(){
+        activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(),
+        ActivityResultCallback { result ->
+            val resultCode = result.resultCode
+            val imageData = result.data
+
+            if (resultCode == RESULT_OK && imageData != null){
+                imageUri = imageData.data
+
+                Glide.with(requireContext())
+                    .load(imageUri)
+                    .into(binding.profileUserImage)
+            }
+        })
+    }
 
     fun userDetailShow(myBoolean: Boolean){
         if (myBoolean) {
@@ -79,9 +145,7 @@ class UserProfileFragment : Fragment() {
 
     fun userProfilePost(){
         var userLast = UserProfile()
-        var userNew = UserProfile()
-        viewModel.getAboutUser(authFirebase.currentUser?.email.toString(),1)
-
+        var userPATCH = UserProfile()
         viewModel.userProfile.observe(viewLifecycleOwner, Observer {
             userLast = UserProfile(
                 id = it.id,
@@ -92,33 +156,44 @@ class UserProfileFragment : Fragment() {
             )
         })
 
-        userNew = UserProfile(
+        userPATCH = UserProfile(
                 id = 1,
-                image =  userLast.image.toString(),
                 student = 1,
                 firstName = binding.userProfileFirstName.text.toString(),
                 lastName = binding.userProfileLastName.text.toString(),
                 age = binding.userEditTextAge.text.toString().toInt()
             )
 
-        Log.e("postUser", userNew.toString())
-        viewModel.userProfilePost(userNew,userLast.id!!.toInt())
+        Log.e("postUser", userPATCH.toString())
+        viewModel.userProfilePATCH(userPATCH,userLast.id!!.toInt())
 
     }
 
     @SuppressLint("SetTextI18n")
     private fun observeLiveData(){
-        viewModel.getAboutUser(authFirebase.currentUser?.email.toString(),1)
+
+        viewModel.getAboutUser(1)
         viewModel.userProfile.observe(viewLifecycleOwner, Observer { a->
             a?.let { userProfile->
-                binding.userProfileFullName.text = userProfile.firstName +" "+ userProfile.lastName
-                binding.userProfileAge.text = userProfile.age.toString()
-                binding.userProfileFirstName.setText(userProfile.firstName.toString())
-                binding.userProfileLastName.setText(userProfile.lastName.toString())
-                binding.userEditTextAge.setText(userProfile.age.toString())
-                Glide.with(requireContext())
-                    .load(userProfile.image)
-                    .into(binding.profileUserImage)
+                if (!userProfile.lastName.isNullOrEmpty() and !userProfile.firstName.isNullOrEmpty()){
+                    binding.userProfileFullName.text = userProfile.firstName +" "+ userProfile.lastName
+                }
+                userProfile.age?.let {
+                    binding.userProfileAge.text = userProfile.age.toString()
+                    binding.userEditTextAge.setText(userProfile.age.toString())
+                }
+                userProfile.firstName?.let {
+                    binding.userProfileFirstName.setText(userProfile.firstName.toString())
+                }
+                userProfile.lastName.let {
+                    binding.userProfileLastName.setText(userProfile.lastName.toString())
+                }
+                userProfile.image?.let {
+                    Glide.with(requireContext())
+                        .load(userProfile.image)
+                        .into(binding.profileUserImage)
+                }
+
                // Picasso.get().load(it.first().image).into(binding.profileUserImage)
 
             }

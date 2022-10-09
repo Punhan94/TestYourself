@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    android:id="@+id/swipeRefreshLayoutUserProfile"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".presentation.ui.fragments.user_fragments.UserProfileFragment"
     android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<ScrollView
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+
+
 
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
@@ -73,7 +80,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@color/white"
-            android:hint="@string/last_name"
+            android:inputType="number"
+            android:hint="@string/age"
             android:padding="10dp"
             android:textColor="@color/black"
             android:textSize="20sp"
@@ -249,3 +257,5 @@
 </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

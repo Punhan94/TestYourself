@@ -1,5 +1,6 @@
 package com.example.testyourself.presentation.viewmodels
 
+import android.media.Image
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,26 +17,25 @@ class UserProfileViewModel(
     var userProfile :MutableLiveData<UserProfile> = MutableLiveData()
     var userAllAnswer:MutableLiveData<List<ExamResult>> = MutableLiveData()
 
-    fun getAboutUser (userEmail:String,studentId:Int) = viewModelScope.launch {
+    fun getAboutUser (studentId:Int) = viewModelScope.launch {
         getAboutUserProfile(studentId)
-        getuserAllAnswer(userEmail)
+        getuserAllAnswer(studentId)
     }
 
-    fun userProfilePost(userProfile:UserProfile,studentId:Int) = viewModelScope.launch{
-        postUserProfile(userProfile,studentId)
+    fun userProfilePATCH(userProfile:UserProfile, studentId:Int) = viewModelScope.launch{
+        patchUserVM(userProfile,studentId)
     }
 
     private suspend fun getAboutUserProfile(studentId:Int){
         if (repository.getUserProfile(studentId).isSuccessful) {
             userProfile.postValue(repository.getUserProfile(studentId).body())
-            Log.e("detail",userProfile.toString())
+
         }
     }
 
-    private suspend fun getuserAllAnswer(userEmail:String){
-        if (repository.getAllExamResult(userEmail).isSuccessful) {
-            userAllAnswer.postValue(repository.getAllExamResult(userEmail).body())
-            Log.e("allAnswer",userAllAnswer.toString())
+    private suspend fun getuserAllAnswer(studentId: Int){
+        if (repository.getAllExamResult(studentId).isSuccessful) {
+            userAllAnswer.postValue(repository.getAllExamResult(studentId).body())
 
         }
     }
@@ -44,8 +44,8 @@ class UserProfileViewModel(
 //        repository.postUserProfile(studentId,userProfile)
 //    }
 
-    private suspend fun postUserProfile(userProfile:UserProfile,studentId:Int){
-        val a = repository.postUserProfile(studentId,
+    private suspend fun patchUserVM(userProfile:UserProfile, studentId:Int){
+        val a = repository.patchUserProfile(studentId,
             id = userProfile.id!!.toInt(),
             student = userProfile.student!!.toInt(),
             firstName = userProfile.firstName.toString(),

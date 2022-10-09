@@ -1,50 +1,63 @@
 package com.example.testyourself.presentation.ui.fragments.login
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.testyourself.R
 import com.example.testyourself.data.repository.FirebaseInstanceRepository
 import com.example.testyourself.databinding.FragmentLoginOrSignInBinding
-import com.example.testyourself.domain.SignInLogic
-import com.example.testyourself.domain.UserRegisterLogic
+import com.example.testyourself.presentation.app.MainActivity
 import com.example.testyourself.presentation.viewmodels.UserRegisterViewModel
+import com.example.testyourself.utils.LoadingDialog
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
-
+import kotlinx.android.synthetic.main.activity_main.*
+import javax.xml.transform.Result
 
 
 class LoginOrSignUpFragment : Fragment() {
     private var _binding: FragmentLoginOrSignInBinding? = null
     private val binding get() = _binding!!
-
     //private lateinit var userRegisterViewModel: UserRegisterViewModel
     private lateinit var authFirebase : FirebaseAuth
     private lateinit var firebaseDatabase : FirebaseDatabase
     private lateinit var databaseReference: DatabaseReference
     private lateinit var firebaseFirestore: FirebaseFirestore
-    private lateinit var loginOrSignUpLogic :SignInLogic
-    private lateinit var userRegisterLogic : UserRegisterLogic
+//    private lateinit var loginOrSignUpLogic :SignInLogic
+//    private lateinit var userRegisterLogic : UserRegisterLogic
     lateinit var viewModel: UserRegisterViewModel
     lateinit var firebaseRepository: FirebaseInstanceRepository
     private var loginName : String = ""
     private var passFirst:String = ""
     private var passSecond:String = ""
+    var jobId :Int = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         firebaseDatabase = FirebaseDatabase.getInstance()
         databaseReference = firebaseDatabase.getReference()
         firebaseFirestore = FirebaseFirestore.getInstance()
-
-
-        super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(UserRegisterViewModel::class.java)
         authFirebase = FirebaseAuth.getInstance()
 
@@ -63,54 +76,46 @@ class LoginOrSignUpFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        firebaseRepository = FirebaseInstanceRepository(view)
+        firebaseRepository = FirebaseInstanceRepository(view, this)
 
         super.onViewCreated(view, savedInstanceState)
-        loginOrSignUpLogic = SignInLogic(view)
-        userRegisterLogic = UserRegisterLogic(view)
+//        loginOrSignUpLogic = SignInLogic(view)
+//        userRegisterLogic = UserRegisterLogic(view)
+
 
         //Register form function start
         binding.register.setOnClickListener {
-            userRegisterLogic.registerFormShow()
+            registerFormShow()
         }
 
         //SignIn form function start
         binding.login.setOnClickListener {
-            loginOrSignUpLogic.signInFormShow()
+            signInFormShow()
         }
-
-        fun getForm(): HashMap<String, String> {
-            loginName = binding.loginName.text.toString().trim()
-            passFirst = binding.password.text.toString().trim()
-            passSecond = binding.passwordRepeat.text.toString().trim()
-
-            return hashMapOf<String,String>(
-                "loginName" to loginName,
-                "passFirst" to passFirst,
-                "passSecond" to passSecond
-            )
-        }
-
 
         //Registration function started
         binding.registerButton.setOnClickListener {
-            val form = getForm()
-            userRegisterLogic.checkRegisterForm(
-                form.get("passFirst") as String, form.get("passSecond") as String,form.get("loginName") as String
+            loginName = binding.loginName.text.toString().trim()
+            passFirst = binding.password.text.toString().trim()
+            passSecond = binding.passwordRepeat.text.toString().trim()
+            checkRegisterForm(
+                loginName,passFirst, passSecond
             )
         }
 
         //Login function started
-        binding.signUpButton.setOnClickListener {
-            val form = getForm()
-            loginOrSignUpLogic.checkSignInForm(
-                form.get("loginName") as String, form.get("passFirst") as String
+        binding.signInButton.setOnClickListener {
+            loginName = binding.loginName.text.toString().trim()
+            passFirst = binding.password.text.toString().trim()
+            checkSignInForm(
+                loginName, passFirst
             )
         }
 
         //RadioButton enabled function
         binding.loginOrSignUpRadioButton.setOnCheckedChangeListener { group, checkedId ->
             binding.registerButton.isEnabled = true
+            jobId = checkedId
         }
 
         // Forgot password page Navigation
@@ -120,75 +125,64 @@ class LoginOrSignUpFragment : Fragment() {
 
     }
 
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
-//    fun signUpLogicNavigate(job:String){
-//        if (job=="teacher"){
-//            findNavController().navigate(R.id.action_loginOrSignUpFragment_to_teacherHomeFragment)
-//        }
-//        else if(job=="student"){
-//            findNavController().navigate(R.id.action_loginOrSignUpFragment_to_studentHomeFragment)
-//        }
-//    }
-//
-//    fun checkRegisterForm(firstPassword:String, secondPassword:String,email:String){
-//
-//        if( firstPassword.equals(secondPassword) and email.isNotEmpty() ){
-//            firebaseRepository.createUserFirebase(email,firstPassword)
-//        }
-//        else if(email.isEmpty()){
-//            Toast.makeText(context, "Emaili bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
-//        }
-//        else if(firstPassword.isEmpty()){
-//            Toast.makeText(context, "Şifrəni bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
-//        }
-//        else if(secondPassword.isEmpty()){
-//            Toast.makeText(context, "Şifrə tekrari bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
-//        }
-//        else{
-//            Toast.makeText(context, "Formu duzgun doldurun", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-//
-//    // Registraion Form Show function
-//    fun registerFormShow(){
-//        binding.register.setTextColor(Color.BLUE)
-//        binding.login.setTextColor(Color.BLACK)
-//        binding.passwordRepeat.visibility = View.VISIBLE
-//        binding.registerButton.visibility = View.VISIBLE
-//        binding.signUpButton.visibility = View.GONE
-//        binding.forgotPassword.visibility = View.GONE
-//        binding.loginOrSignUpRadioButton.visibility = View.VISIBLE
-//    }
-//
-//    fun checkSignInForm(email: String, firstPassword: String) {
-//
-//        if (firstPassword.isNotEmpty() and email.isNotEmpty()) {
-//            firebaseRepository.loginUserFirebase(email, firstPassword)
-//        } else if (email.isEmpty()) {
-//            Toast.makeText(context, "Emaili bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
-//        } else if (firstPassword.isEmpty()) {
-//            Toast.makeText(context, "Şifrəni bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
-//        } else {
-//            Toast.makeText(context, "Xeta bas verdi", Toast.LENGTH_SHORT).show()
-//        }
-//    }
-//
-//
-//    //Sign up Form Show Function
-//    fun signInFormShow() {
-//        binding.login.setTextColor(Color.BLUE)
-//        binding.register.setTextColor(Color.BLACK)
-//        binding.passwordRepeat.visibility = View.GONE
-//        binding.registerButton.visibility = View.GONE
-//        binding.signUpButton.visibility = View.VISIBLE
-//        binding.forgotPassword.visibility = View.VISIBLE
-//        binding.signUpButton.isEnabled = true
-//        binding.loginOrSignUpRadioButton.visibility = View.GONE
-//    }
+    fun checkRegisterForm(email:String,firstPassword:String, secondPassword:String){
+        if( firstPassword.equals(secondPassword) and email.isNotEmpty() ){
+            firebaseRepository.createUserFirebase(email,firstPassword,jobId)
+            binding.registerButton.isClickable = false
+        }
+        else if(email.isEmpty()){
+            Toast.makeText(context, "Emaili bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
+        }
+        else if(firstPassword.isEmpty()){
+            Toast.makeText(context, "Şifrəni bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
+        }
+        else if(secondPassword.isEmpty()){
+            Toast.makeText(context, "Şifrə tekrari bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
+        }
+        else if(firstPassword.toInt() != secondPassword.toInt()){
+            Toast.makeText(context, "Şifrə ilə təkrar şifrə uyğun deyil", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            Toast.makeText(context, "Formu duzgun doldurun", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // Registraion Form Show function
+    fun registerFormShow(){
+        binding.register.setTextColor(Color.WHITE)
+        binding.login.setTextColor(Color.BLACK)
+        binding.registerLayoutShow.visibility = View.VISIBLE
+        binding.signInLayoutShow.visibility = View.GONE
+    }
+
+    fun checkSignInForm(email: String, firstPassword: String) {
+
+        if (firstPassword.isNotEmpty() and email.isNotEmpty()) {
+            binding.signInButton.isClickable = false
+            firebaseRepository.loginUserFirebase(email, firstPassword)
+        } else if (email.isEmpty()) {
+            Toast.makeText(context, "Emaili bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
+        } else if (firstPassword.isEmpty()) {
+            Toast.makeText(context, "Şifrəni bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Xeta bas verdi", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    //Sign up Form Show Function
+    fun signInFormShow() {
+        binding.login.setTextColor(Color.WHITE)
+        binding.register.setTextColor(Color.BLACK)
+        binding.registerLayoutShow.visibility = View.GONE
+        binding.signInLayoutShow.visibility = View.VISIBLE
+    }
 
 
 }

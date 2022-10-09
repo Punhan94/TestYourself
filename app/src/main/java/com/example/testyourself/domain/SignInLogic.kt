@@ -7,37 +7,39 @@ import com.example.testyourself.data.repository.FirebaseInstanceRepository
 import kotlinx.android.synthetic.main.fragment_login_or_sign_in.view.*
 
 class SignInLogic(val view:View) {
-    lateinit var firebaseRepository: FirebaseInstanceRepository
-
-    //Sign up Form Logic
-    fun checkSignInForm(email: String, firstPassword: String) {
-        firebaseRepository = FirebaseInstanceRepository(view)
-
-        if (firstPassword.isNotEmpty() and email.isNotEmpty()) {
-            firebaseRepository.loginUserFirebase(email, firstPassword)
-        } else if (email.isEmpty()) {
-            view.login_name.error = "bos buraxila bilmez"
-            view.login_name.isFocused
-        } else if (firstPassword.isEmpty()) {
-            view.password.error = "bos buraxila bilmez"
-            view.login_name.isFocused
-        } else {
-            Toast.makeText(view.context, "Xeta bas verdi", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
-    //Sign up Form Show Function
-    fun signInFormShow() {
-        view.login.setTextColor(Color.BLUE)
-        view.register.setTextColor(Color.BLACK)
-        view.password_repeat.visibility = View.GONE
-        view.register_button.visibility = View.GONE
-        view.signUp_button.visibility = View.VISIBLE
-        view.forgot_password.visibility = View.VISIBLE
-        view.signUp_button.isEnabled = true
-        view.login_or_signUp_radioButton.visibility = View.GONE
-    }
+//    lateinit var firebaseRepository: FirebaseInstanceRepository
+//
+//    //Sign up Form Logic
+//    fun checkSignInForm(email: String, firstPassword: String) {
+//        firebaseRepository = FirebaseInstanceRepository(view)
+//
+//        if (firstPassword.isNotEmpty() and email.isNotEmpty()) {
+//            firebaseRepository.loginUserFirebase(email, firstPassword)
+//        } else if (email.isEmpty()) {
+//            view.login_name.error = "bos buraxila bilmez"
+//            view.login_name.isFocused
+//        } else if (firstPassword.isEmpty()) {
+//            view.password.error = "bos buraxila bilmez"
+//            view.login_name.isFocused
+//        } else {
+//            Toast.makeText(view.context, "Xeta bas verdi", Toast.LENGTH_SHORT).show()
+//        }
+//    }
+//
+//
+//    //Sign up Form Show Function
+//    fun signInFormShow() {
+//        view.login.setTextColor(Color.WHITE)
+//        view.register.setTextColor(Color.BLACK)
+//        view.password_repeat.visibility = View.GONE
+//        view.register_button.visibility = View.GONE
+//        view.signUp_button.visibility = View.VISIBLE
+//        view.forgot_password.visibility = View.VISIBLE
+//        view.signUp_button.isEnabled = true
+//        view.login_or_signUp_radioButton.visibility = View.GONE
+//        view.layout_OR.visibility = View.VISIBLE
+//        view.google_signIn.visibility = View.VISIBLE
+//    }
 }
 
 

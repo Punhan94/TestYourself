@@ -10,7 +10,7 @@
     <string name="password_repeat">Şifrənizi təkrar yazın</string>
     <string name="login_button">Daxil ol</string>
     <string name="register_button">Təsdiqlə</string>
-    <string name="forgot_password">Şifrəmi unutdum</string>
+    <string name="forgot_password"><u>Şifrəmi unutdum</u></string>
     <string name="first_slide_header">Gənc müəllimlərimizi yeni suallar tərtib edərək ölkə gəncləri üçün sualları əlçanat etməyə dəvət edirik</string>
     <string name="second_slide_header">Artıq öz biliklərinizi istənilən yerdə və istənilən zaman test edə biləcəksiniz</string>
     <string name="finished_OnBoarding_btn">Başla</string>
@@ -34,6 +34,4 @@
     <string name="age">18</string>
     <string name="confirm">Təsdiq</string>
     <string name="cancel">Ləğv</string>
-
-
 </resources>

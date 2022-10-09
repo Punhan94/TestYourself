@@ -4,12 +4,15 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/change_form.xml" value="0.1605" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/email.xml" value="0.1825" />
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/gradient_2.xml" value="0.1425" />
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/gradient_3.xml" value="0.1425" />
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/ic_baseline_exit_to_app_24.xml" value="0.1435" />
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/ic_baseline_manage_accounts_24.xml" value="0.135" />
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/ic_baseline_menu_.xml" value="0.1435" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/ic_baseline_visibility_24.xml" value="0.1825" />
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/input_bacground.xml" value="0.1605" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/drawable/login_shape.xml" value="0.1825" />
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_exam_list.xml" value="0.25" />
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_exam_test.xml" value="0.25" />
@@ -31,6 +34,7 @@
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/fragment_user_profile.xml" value="0.2" />
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/header_menu.xml" value="0.25" />
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/lesson_item.xml" value="0.25" />
+        <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/layout/loading_item.xml" value="0.24895833333333334" />
         <entry key="..\:/Users/selim/AndroidStudioProjects/TestYourself/app/src/main/res/menu/user_menu.xml" value="0.18671875" />
       </map>
     </option>

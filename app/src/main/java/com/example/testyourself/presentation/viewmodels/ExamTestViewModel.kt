@@ -20,9 +20,11 @@ class ExamTestViewModel(
     }
 
     fun postResult(examResult: ExamResult) = viewModelScope.launch {
-        postDataFromApi(examResult.student,examResult.exam,examResult.testNumer,
-        examResult.answer ?: "",examResult.answerBoolean)
-    }
+        postDataFromApi(examResult)}
+
+//        postDataFromApi(examResult.student,examResult.exam,examResult.testNumer,
+//        examResult.answer ?: "",examResult.answerBoolean)
+
 
     private suspend fun getDataFromAPITest(examId:Int){
         Log.e("getDataFromAPITest",examId.toString())
@@ -31,13 +33,23 @@ class ExamTestViewModel(
         }
     }
 
-    private suspend fun postDataFromApi(student: Int,
-                                        exam:Int,
-                                        testNum:Int,
-                                        answer:String,
-                                        answerBoolean:Boolean?){
+    private suspend fun postDataFromApi(
+        examResult: ExamResult
+    ){
         repository.postExamResult(
-            student, exam, testNum, answer, answerBoolean
+            examResult
         )
     }
+
+
+
+//    private suspend fun postDataFromApi(student: Int,
+//                                        exam:Int,
+//                                        testNum:Int,
+//                                        answer:String,
+//                                        answerBoolean:Boolean?){
+//        repository.postExamResult(
+//            student, exam, testNum, answer, answerBoolean
+//        )
+//    }
 }

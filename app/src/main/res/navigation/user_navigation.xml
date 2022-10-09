@@ -27,7 +27,8 @@
         tools:layout="@layout/fragment_exam_list" >
         <action
             android:id="@+id/action_examListFragment_to_examTestFragment"
-            app:destination="@id/examTestFragment" />
+            app:destination="@id/examTestFragment"
+            />
     </fragment>
     <fragment
         android:id="@+id/examTestFragment"
@@ -36,13 +37,24 @@
         tools:layout="@layout/fragment_exam_test" >
         <action
             android:id="@+id/action_examTestFragment_to_resultFragment"
-            app:destination="@id/resultFragment" />
+            app:destination="@id/resultFragment"
+            app:popUpTo="@+id/examListFragment"
+            app:popUpToInclusive="true"
+            />
     </fragment>
     <fragment
         android:id="@+id/resultFragment"
         android:name="com.example.testyourself.presentation.ui.fragments.user_fragments.ResultFragment"
         android:label="fragment_result"
-        tools:layout="@layout/fragment_result" />
+        tools:layout="@layout/fragment_result" >
+
+        <action
+            android:id="@+id/action_resultFragment_to_userHomeFragment"
+            app:destination="@id/userHomeFragment"
+            app:popUpTo="@+id/userHomeFragment"
+            app:popUpToInclusive="true"
+            />
+    </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.example.testyourself.presentation.ui.fragments.user_fragments.UserProfileFragment"

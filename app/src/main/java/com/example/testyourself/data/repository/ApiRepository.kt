@@ -1,10 +1,10 @@
 package com.example.testyourself.data.repository
 
-import android.util.Log
 import com.example.testyourself.data.models.*
 import com.example.testyourself.data.network.api.ExamRetrofitInstance
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -21,12 +21,28 @@ class ApiRepository() {
         return ExamRetrofitInstance.api.getAllExamTests(thisExamId)
     }
 
-    suspend fun getAllExamResult(@Query("pk") thisExamId: String) : Response<List<ExamResult>> {
-        return ExamRetrofitInstance.api.getExamResultGET(thisExamId)
+    suspend fun getAllExamResult(@Path("pk") thisExamId: Int) : Response<List<ExamResult>> {
+        return ExamRetrofitInstance.api.getExamResult(thisExamId)
     }
 
     suspend fun getUserProfile(@Path("pk") studentId: Int) : Response<UserProfile> {
         return ExamRetrofitInstance.api.getUserProfile(studentId)
+    }
+
+    suspend fun getAllStudent():Response<List<Student>>{
+        return ExamRetrofitInstance.api.getAllStudent()
+    }
+
+    suspend fun getAllUserProfile():Response<List<UserProfile>>{
+        return ExamRetrofitInstance.api.getAllUserProfile()
+    }
+
+    suspend fun postNewUserProfile(@Body userProfile: UserProfile) : Response<UserProfile> {
+        return ExamRetrofitInstance.api.postNewUserProfile(userProfile)
+    }
+
+    suspend fun getEmailForStudent(@Query("studentName") studentName:String):Response<List<Student>>{
+        return ExamRetrofitInstance.api.getEmailForStudent(studentName)
     }
 
 //    suspend fun postUserProfile(@Path("pk") studentId: Int,
@@ -37,14 +53,14 @@ class ApiRepository() {
 //            )
 //    }
 
-    suspend fun postUserProfile(@Path("pk") studentId: Int,
-                                id:Int,
-                                student:Int,
-                                firstName:String,
-                                lastName:String,
-                                age:Int
+    suspend fun patchUserProfile(@Path("pk") studentId: Int,
+                                 id:Int,
+                                 student:Int,
+                                 firstName:String,
+                                 lastName:String,
+                                 age:Int
     ) : Response<UserProfile> {
-        return ExamRetrofitInstance.api.postUserProfilePOST(studentId,
+        return ExamRetrofitInstance.api.patchUserProfile(studentId,
             id, student ,firstName, lastName,age)
     }
 
@@ -56,16 +72,19 @@ class ApiRepository() {
         return ExamRetrofitInstance.api.getOnlyExamTest(studentId)
     }
 
-    suspend fun postExamResult(student: Int,
-                               exam:Int,
-                               testNumer:Int,
-                               answer:String,
-                               answerBoolean:Boolean?
-                               ) :Response<ExamResult> {
-        return ExamRetrofitInstance.api.postExamResult(
-            student,exam,testNumer,answer, answerBoolean
-        )
+    suspend fun postExamResult(@Body examResult: ExamResult): Response<ExamResult>{
+        return ExamRetrofitInstance.api.postExamResult(examResult)
     }
 
+//    suspend fun postExamResult(student: Int,
+//                               exam:Int,
+//                               testNumer:Int,
+//                               answer:String,
+//                               answerBoolean:Boolean?
+//                               ) :Response<ExamResult> {
+//        return ExamRetrofitInstance.api.postExamResult(
+//            student,exam,testNumer,answer
+//        )
+//    }
 
 }
