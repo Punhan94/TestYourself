@@ -62,5 +62,6 @@
         android:label="fragment_student_home"
         tools:layout="@layout/fragment_student_home" />
     <include app:graph="@navigation/user_navigation" />
+    <include app:graph="@navigation/teacher_navigation" />
 
 </navigation>

@@ -3,9 +3,12 @@ package com.example.testyourself.utils
 object Constant {
         const val BASE_URL = "https://testyourself.homes/api/"
         const val ALL_LESSON = "lesson/"
+        const val ALL_GROUP = "groupstudent/"
         const val ALL_EXAM = "exam/"
         const val ALL_EXAM_TESTS = "examtest/{pk}/"
-        const val ONLY_EXAM_TEST = "onlytest/exam/{pk}/"
+        const val ONLY_TEST_PK = "onlytest/{pk}/"
+        const val ONLY_TEST = "onlytest/"
+        const val EXAM_TEST_PK = "onlytest/exam/{pk}/"
         const val STUDENT = "student/"
         const val STUDENT_PK = "student/{pk}/"
         const val USER_PROFILE_PK = "userprofile/{pk}/"
@@ -15,4 +18,8 @@ object Constant {
         const val TRUE_ANSWER_COUNT = "Ümumi düzgün cavab : "
         const val FALSE_ANSWER_COUNT = "Ümumi səhv cavab : "
         const val NULL_ANSWER_COUNT = "Ümumi boş cavab : "
+        const val EXAM_END = "İmtahan bitdi"
+        const val SHOW_RESULT = "Nəticələri görməyə hazırsınız?"
+        const val OK = "hə"
+        const val NO = "yox"
 }

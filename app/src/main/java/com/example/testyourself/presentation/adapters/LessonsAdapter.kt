@@ -1,6 +1,5 @@
 package com.example.testyourself.presentation.adapters
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +8,8 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.bumptech.glide.GlideBuilder
 import com.example.testyourself.R
-import com.example.testyourself.data.models.Lesson
-import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_login_or_sign_in.view.*
+import com.example.testyourself.domain.models.Lesson
 import kotlinx.android.synthetic.main.lesson_item.view.*
 
 class LessonsAdapter(private var context: Fragment):RecyclerView.Adapter<LessonsAdapter.LessonViewHolder>() {

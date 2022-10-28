@@ -1,39 +1,37 @@
 package com.example.testyourself.presentation.ui.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.testyourself.R
-import com.example.testyourself.data.models.Student
-import com.example.testyourself.data.models.UserProfile
-import com.example.testyourself.data.repository.ApiRepository
+import com.example.testyourself.domain.models.Student
+import com.example.testyourself.domain.models.UserProfile
 import com.example.testyourself.databinding.FragmentStudentHomeBinding
 import com.example.testyourself.presentation.viewmodels.StudentHomeViewModel
-import com.example.testyourself.presentation.viewmodels.StudentHomeViewModelProviderFactory
 import com.example.testyourself.utils.LoadingDialog
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_student_home.*
 import kotlinx.android.synthetic.main.header_menu.view.*
 
-
+@AndroidEntryPoint
 class StudentHomeFragment : Fragment() {
     private var _binding: FragmentStudentHomeBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: StudentHomeViewModel
+    private val viewModel: StudentHomeViewModel by viewModels()
     lateinit var authFirebase: FirebaseAuth
     private var myStudent = Student()
     private var myUserProfile = UserProfile()
@@ -44,10 +42,6 @@ class StudentHomeFragment : Fragment() {
         loading.startLoading()
         super.onCreate(savedInstanceState)
         authFirebase = FirebaseAuth.getInstance()
-
-        val viewModelProviderFactory = StudentHomeViewModelProviderFactory(ApiRepository())
-        viewModel = ViewModelProviders.of(this, viewModelProviderFactory)
-            .get(StudentHomeViewModel::class.java)
 
     }
 
@@ -66,21 +60,19 @@ class StudentHomeFragment : Fragment() {
         getAllStudent()
         loading.isDisMiss()
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object: OnBackPressedCallback(true){
+                override fun handleOnBackPressed() {
+                    exituser()
+                }
+            } )
 
-//        myStudent.id?.let {
-//            observeLiveData(it)
-//        }
-//        if (myUserProfile.student?.toInt() != myStudent.id?.toInt()){
-//            myStudent.id?.let { it?.toInt()?.let { it1 -> viewModel.newUserProfile(it1) } }
-//        }
-
-
-        navigationView.setNavigationItemSelectedListener { item ->
+        binding.navigationView.setNavigationItemSelectedListener { item ->
             navigationSelect(item)
             true
         }
-        navigation_view_toggle.setOnClickListener {
-            studentDrawerLayout.openDrawer(GravityCompat.START)
+        binding.navigationViewToggle.setOnClickListener {
+            binding.studentDrawerLayout.openDrawer(GravityCompat.START)
         }
     }
 
@@ -112,7 +104,6 @@ class StudentHomeFragment : Fragment() {
                 studentName = authFirebase.currentUser?.email.toString()
             )
         )
-
     }
 
     private fun findAllUserProfile(studId: Int){
@@ -168,38 +159,29 @@ class StudentHomeFragment : Fragment() {
                     .navigate(R.id.userProfileFragment)
             }
             R.id.user_exit -> {
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Çıxış")
-                    .setMessage("Çıxmaq istədiyinizdən əminsiniz?")
-                    .setCancelable(true)
-                    .setNegativeButton("yox", object : DialogInterface.OnClickListener {
-                        override fun onClick(dialog: DialogInterface?, which: Int) {
-                        }
-                    })
-                    .setPositiveButton("he", object : DialogInterface.OnClickListener {
-                        override fun onClick(dialog: DialogInterface?, which: Int) {
-                            authFirebase.signOut()
-                            findNavController().navigate(R.id.loginOrSignUpFragment)
-                        }
-                    }).show()
+                exituser()
             }
 
         }
     }
 
+    fun exituser(){
+        AlertDialog.Builder(requireContext())
+            .setTitle("Çıxış")
+            .setMessage("Çıxmaq istədiyinizdən əminsiniz?")
+            .setCancelable(true)
+            .setNegativeButton("yox", object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                }
+            })
+            .setPositiveButton("he", object : DialogInterface.OnClickListener {
+                override fun onClick(dialog: DialogInterface?, which: Int) {
+                    authFirebase.signOut()
+                    findNavController().navigate(R.id.loginOrSignUpFragment)
+                }
+            }).show()
+    }
+
 }
 
 
-
-
-//    private fun student(){
-//        viewModel.studentName(authFirebase.currentUser?.email.toString())
-//        viewModel.onlyStudent.observe(viewLifecycleOwner, Observer {  student->
-//            student?.let {
-//                myStudent = it
-//            }
-//            if (myStudent.studentName == null){
-//                newStudent()
-//            }
-//        })
-//    }

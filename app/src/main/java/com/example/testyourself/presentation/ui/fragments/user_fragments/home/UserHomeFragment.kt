@@ -6,20 +6,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testyourself.R
-import com.example.testyourself.data.repository.ApiRepository
+import com.example.testyourself.databinding.FragmentUserHomeBinding
 import com.example.testyourself.presentation.adapters.LessonsAdapter
-import com.example.testyourself.presentation.viewmodels.HomeViewModelProviderFactory
 import com.example.testyourself.presentation.viewmodels.UserHomeViewModel
-import kotlinx.android.synthetic.main.fragment_user_home.*
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UserHomeFragment : Fragment() {
-    private lateinit var viewModel: UserHomeViewModel
+    private val viewModel: UserHomeViewModel by viewModels()
     private val lessonAdapter = LessonsAdapter(this)
+    private var _binding : FragmentUserHomeBinding?=null
+    private val binding get() = _binding!!
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,17 +35,18 @@ class UserHomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_home, container, false)
+        _binding = FragmentUserHomeBinding.inflate(inflater,container,false)
+        val view = binding.root
+        return view
 
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userHome_recyclerView.layoutManager = LinearLayoutManager(context)
-        userHome_recyclerView.adapter = lessonAdapter
-        val viewModelProviderFactory=HomeViewModelProviderFactory(ApiRepository())
-        viewModel = ViewModelProviders.of(this, viewModelProviderFactory ).get(UserHomeViewModel::class.java)
+        binding.userHomeRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.userHomeRecyclerView.adapter = lessonAdapter
+
         observeLiveData()
 
         lessonAdapter.onItemClick={
@@ -52,6 +56,11 @@ class UserHomeFragment : Fragment() {
             findNavController().navigate(R.id.action_userHomeFragment_to_examListFragment, bundle)
         }
 
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 
     private fun observeLiveData(){

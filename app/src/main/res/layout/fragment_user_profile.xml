@@ -13,8 +13,6 @@
     android:layout_height="match_parent"
     >
 
-
-
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -121,7 +119,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingHorizontal="20dp"
-        android:paddingBottom="50dp"
+        android:paddingBottom="90dp"
         android:paddingTop="20dp"
         android:background="#000000"
         app:layout_constraintBottom_toBottomOf="parent"

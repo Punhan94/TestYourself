@@ -4,52 +4,47 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testyourself.data.models.ExamResult
-import com.example.testyourself.data.models.Test
-import com.example.testyourself.data.repository.ApiRepository
+import com.example.testyourself.domain.models.ExamResult
+import com.example.testyourself.domain.models.Test
+import com.example.testyourself.domain.repositories.ExamApiRepository
+import com.example.testyourself.domain.usecases.exam_api_usecase.GetAllExamTestsUseCase
+import com.example.testyourself.domain.usecases.exam_api_usecase.PostExamResultUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ExamTestViewModel(
-    val repository: ApiRepository
+@HiltViewModel
+class ExamTestViewModel @Inject constructor(
+    val repository: ExamApiRepository
 ):ViewModel() {
+
     val tests: MutableLiveData<List<Test>> = MutableLiveData()
+    private val getAllExamTestsUseCase: GetAllExamTestsUseCase = GetAllExamTestsUseCase(repository)
+    private val postExamResultUseCase: PostExamResultUseCase = PostExamResultUseCase(repository)
 
     fun getTest(myId:Int)= viewModelScope.launch {
-        Log.e("getTest",myId.toString())
         getDataFromAPITest(myId)
     }
 
     fun postResult(examResult: ExamResult) = viewModelScope.launch {
-        postDataFromApi(examResult)}
-
-//        postDataFromApi(examResult.student,examResult.exam,examResult.testNumer,
-//        examResult.answer ?: "",examResult.answerBoolean)
+        postDataFromApi(examResult)
+    }
 
 
     private suspend fun getDataFromAPITest(examId:Int){
-        Log.e("getDataFromAPITest",examId.toString())
-        if (repository.getAllExamTests(examId).isSuccessful) {
-            tests.postValue(repository.getAllExamTests(examId).body())
+        val allExamTests = getAllExamTestsUseCase.getAllExamTests(examId)
+        if (allExamTests.isSuccessful) {
+            tests.postValue(allExamTests.body())
         }
     }
 
     private suspend fun postDataFromApi(
         examResult: ExamResult
     ){
-        repository.postExamResult(
+        postExamResultUseCase.postExamResult(
             examResult
         )
     }
 
 
-
-//    private suspend fun postDataFromApi(student: Int,
-//                                        exam:Int,
-//                                        testNum:Int,
-//                                        answer:String,
-//                                        answerBoolean:Boolean?){
-//        repository.postExamResult(
-//            student, exam, testNum, answer, answerBoolean
-//        )
-//    }
 }

@@ -7,10 +7,11 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.testyourself.R
-import com.example.testyourself.data.models.Exam
+import com.example.testyourself.domain.models.Exam
+import kotlinx.android.synthetic.main.group_item.view.*
 import kotlinx.android.synthetic.main.lesson_item.view.*
 
-class ExamAdapter : RecyclerView.Adapter<ExamAdapter.ExamViewHolder>() {
+class ExamAdapter(val boolean: Boolean) : RecyclerView.Adapter<ExamAdapter.ExamViewHolder>() {
     var onItemClick : ((Exam)->Unit) ?= null
 
     inner class ExamViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
@@ -35,18 +36,31 @@ class ExamAdapter : RecyclerView.Adapter<ExamAdapter.ExamViewHolder>() {
     val differ = AsyncListDiffer(this,differCallBack)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExamViewHolder {
-        return ExamViewHolder(
-            LayoutInflater.from(parent.context).inflate(
-            R.layout.lesson_item, parent, false
-        ))
+        if (boolean){
+            return ExamViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.lesson_item, parent, false
+                ))
+        }else{
+            return ExamViewHolder(
+                LayoutInflater.from(parent.context).inflate(
+                    R.layout.exam_item, parent, false
+                ))
+        }
+
     }
 
     override fun onBindViewHolder(holder: ExamViewHolder, position: Int) {
-        differ.let {lessons->
-            holder.itemView.lesson_name_textView.text = lessons.currentList[position].examName.uppercase()
-
+        differ.let {exams->
+            if (boolean) {
+                holder.itemView.lesson_name_textView.text =
+                    exams.currentList[position].examName.uppercase()
+            }else{
+                holder.itemView.groupName.text =
+                    exams.currentList[position].examName
+            }
             holder.itemView.setOnClickListener {
-                onItemClick?.invoke(lessons.currentList[position])
+                onItemClick?.invoke(exams.currentList[position])
             }
         }
     }

@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-android-extensions'
     id 'kotlin-kapt'
     id 'com.google.gms.google-services'
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -118,5 +119,9 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:2.1.0'
 
     implementation 'com.google.android.gms:play-services-location:20.0.0'
+
+    //Hilt
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
 }

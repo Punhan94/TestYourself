@@ -1,23 +1,23 @@
 package com.example.testyourself.presentation.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testyourself.data.models.Exam
-import com.example.testyourself.data.models.Lesson
-import com.example.testyourself.data.models.Test
-import com.example.testyourself.data.models.UserProfile
-import com.example.testyourself.data.network.api.ExamRetrofitInstance
-import com.example.testyourself.data.repository.ApiRepository
-import com.example.testyourself.utils.Resource
+import com.example.testyourself.domain.models.Lesson
+import com.example.testyourself.domain.repositories.ExamApiRepository
+import com.example.testyourself.domain.usecases.exam_api_usecase.GetAllLessonUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class UserHomeViewModel(
-    private val repository: ApiRepository
+@HiltViewModel
+class UserHomeViewModel @Inject constructor(
+    private val repository: ExamApiRepository
 ): ViewModel() {
-    //private lateinit var firebaseFirestore: FirebaseFirestore
+
     val lesson :MutableLiveData<List<Lesson>> = MutableLiveData()
+    private val getAllLessonUseCase: GetAllLessonUseCase = GetAllLessonUseCase(repository)
+
 
     init {
         getLesson()
@@ -28,25 +28,10 @@ class UserHomeViewModel(
     }
 
     private suspend fun getDataFromAPILesson() {
-        if (repository.getAllLesson().isSuccessful) {
-            lesson.postValue(repository.getAllLesson().body())
+        val allLesson = getAllLessonUseCase.getAllLesson()
+        if (allLesson.isSuccessful) {
+            lesson.postValue(allLesson.body())
         }
     }
 
-
-//    fun lessonFirebaseCall() {
-//        firebaseFirestore = FirebaseFirestore.getInstance()
-//        firebaseFirestore.collection("lessons")
-//            .get()
-//            .addOnSuccessListener { result ->
-//                val resultList = arrayListOf<Lesson>()
-//                for (lesson in result) {
-//                    val a = Lesson(lesson.data.keys.toString(),lesson.data.values.toString())
-//                    resultList.add(a)
-//                }
-//                lesson.value = resultList
-//            }
-//            .addOnFailureListener { exception ->
-//            }
-//    }
 }

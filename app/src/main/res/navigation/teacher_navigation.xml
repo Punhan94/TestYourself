@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/teacher_navigation"
+    app:startDestination="@id/homeLayoutTeacherFragment">
+
+    <fragment
+        android:id="@+id/homeLayoutTeacherFragment"
+        android:name="com.example.testyourself.presentation.ui.fragments.teacher_fragments.HomeLayoutTeacherFragment"
+        android:label="fragment_home_layout_teacher"
+        tools:layout="@layout/fragment_home_layout_teacher" >
+        <action
+            android:id="@+id/action_homeLayoutTeacherFragment_to_newExamFragment"
+            app:destination="@id/newExamFragment" />
+        <action
+            android:id="@+id/action_homeLayoutTeacherFragment_to_groupFragment"
+            app:destination="@id/groupFragment" />
+        <action
+            android:id="@+id/action_homeLayoutTeacherFragment_to_studentAddGroupFragment"
+            app:destination="@id/studentAddGroupFragment" />
+        <action
+            android:id="@+id/action_homeLayoutTeacherFragment_to_changeOrNewTestFragment"
+            app:destination="@id/changeOrNewTestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/studentAddGroupFragment"
+        android:name="com.example.testyourself.presentation.ui.fragments.teacher_fragments.StudentAddGroupFragment"
+        android:label="fragment_student_add_group"
+        tools:layout="@layout/fragment_student_add_group" />
+    <fragment
+        android:id="@+id/groupFragment"
+        android:name="com.example.testyourself.presentation.ui.fragments.teacher_fragments.GroupFragment"
+        android:label="fragment_group"
+        tools:layout="@layout/fragment_group" >
+        <action
+            android:id="@+id/action_groupFragment_to_studentAddGroupFragment2"
+            app:destination="@id/studentAddGroupFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newExamFragment"
+        android:name="com.example.testyourself.presentation.ui.fragments.teacher_fragments.NewExamFragment"
+        android:label="fragment_new_exam"
+        tools:layout="@layout/fragment_new_exam" >
+        <action
+            android:id="@+id/action_newExamFragment_to_changeOrNewTestFragment"
+            app:destination="@id/changeOrNewTestFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/changeOrNewTestFragment"
+        android:name="com.example.testyourself.presentation.ui.fragments.teacher_fragments.ChangeOrNewTestFragment"
+        android:label="fragment_change_or_new_test"
+        tools:layout="@layout/fragment_change_or_new_test" />
+</navigation>

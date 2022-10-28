@@ -22,12 +22,6 @@ class ResultFragment : Fragment() {
     private var _binding: FragmentResultBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,8 +37,6 @@ class ResultFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val argument = arguments?.get("testResult") as HashMap<Int,Boolean?>
         showPieChart(argument)
-
-
 
 
     }

@@ -3,14 +3,24 @@ package com.example.testyourself.presentation.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testyourself.data.models.Student
-import com.example.testyourself.data.models.UserProfile
-import com.example.testyourself.data.repository.ApiRepository
+import com.example.testyourself.domain.models.Student
+import com.example.testyourself.domain.models.UserProfile
+import com.example.testyourself.domain.repositories.ExamApiRepository
+import com.example.testyourself.domain.usecases.exam_api_usecase.*
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class StudentHomeViewModel(
-    private val repository: ApiRepository
+@HiltViewModel
+class StudentHomeViewModel @Inject constructor(
+    private val repository: ExamApiRepository
 ):ViewModel() {
+    private val getUserProfileUseCase: GetUserProfileUseCase = GetUserProfileUseCase(repository)
+    private val getAllUserProfileUseCase: GetAllUserProfileUseCase = GetAllUserProfileUseCase(repository)
+    private val getAllStudentUseCase: GetAllStudentUseCase = GetAllStudentUseCase(repository)
+    private val postNewUserProfileUseCase: PostNewUserProfileUseCase = PostNewUserProfileUseCase(repository)
+    private val getEmailForStudentUseCase: GetEmailForStudentUseCase = GetEmailForStudentUseCase(repository)
+    private val postStudentUseCase: PostStudentUseCase = PostStudentUseCase(repository)
     var userProfile : MutableLiveData<UserProfile> = MutableLiveData()
     var newStudent : MutableLiveData<Student> = MutableLiveData()
     var allStudent : MutableLiveData<List<Student>> = MutableLiveData()
@@ -45,7 +55,7 @@ class StudentHomeViewModel(
     }
 
     private suspend fun getOnlyStudentForEmail(studentName:String){
-        val responseStudent = repository.getEmailForStudent(studentName)
+        val responseStudent = getEmailForStudentUseCase.getEmailForStudent(studentName)
         if(responseStudent.isSuccessful and (responseStudent.body() != null)) {
             onlyStudent.postValue(responseStudent.body())
         }
@@ -53,25 +63,28 @@ class StudentHomeViewModel(
 
 
     private suspend fun getAllStudent(){
-        if (repository.getAllStudent().isSuccessful){
-            allStudent.postValue(repository.getAllStudent().body())
+        val getAllStudent = getAllStudentUseCase.getAllStudent()
+        if (getAllStudent.isSuccessful){
+            allStudent.postValue(getAllStudent.body())
         }
     }
 
     private suspend fun allUserProfile(){
-        if (repository.getAllUserProfile().isSuccessful){
-            usersProfile.postValue(repository.getAllUserProfile().body())
+        val getAllUserProfile = getAllUserProfileUseCase.getAllUserProfile()
+        if (getAllUserProfile.isSuccessful){
+            usersProfile.postValue(getAllUserProfile.body())
         }
     }
 
     private suspend fun getAboutUserProfile(studentId:Int){
-        if (repository.getUserProfile(studentId).isSuccessful) {
-            userProfile.postValue(repository.getUserProfile(studentId).body())
+        val getUserProfile = getUserProfileUseCase.getUserProfile(studentId)
+        if (getUserProfile.isSuccessful) {
+            userProfile.postValue(getUserProfile.body())
         }
     }
 
     private suspend fun newStudentPOST(student: Student){
-        val newStudentRepo = repository.postStudent(student)
+        val newStudentRepo = postStudentUseCase.postStudent(student)
         if (newStudentRepo.isSuccessful){
             newStudent.postValue(newStudentRepo.body())
             newStudentRepo.body()?.id?.let { newUserProfileAdd(it.toInt()) }
@@ -79,7 +92,7 @@ class StudentHomeViewModel(
     }
 
     private suspend fun newUserProfileAdd(studentId:Int){
-        repository.postNewUserProfile(
+        postNewUserProfileUseCase.postNewUserProfile(
             UserProfile(
                 student = studentId
                 )

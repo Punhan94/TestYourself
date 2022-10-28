@@ -1,10 +1,8 @@
 package com.example.testyourself.presentation.ui.fragments.user_fragments.exam_test
 
-import android.content.DialogInterface
 import android.graphics.Color
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.*
 import android.widget.RadioButton
 import androidx.activity.OnBackPressedCallback
@@ -12,48 +10,37 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.findFragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.example.testyourself.R
-import com.example.testyourself.data.models.ExamResult
-import com.example.testyourself.data.models.Test
-import com.example.testyourself.data.repository.ApiRepository
+import com.example.testyourself.domain.models.ExamResult
+import com.example.testyourself.domain.models.Test
 import com.example.testyourself.databinding.FragmentExamTestBinding
-import com.example.testyourself.databinding.FragmentStudentHomeBinding
-import com.example.testyourself.domain.ExamTestLogic
-import com.example.testyourself.domain.UserRegisterLogic
-import com.example.testyourself.presentation.viewmodels.ExamTestModelProviderFactory
 import com.example.testyourself.presentation.viewmodels.ExamTestViewModel
+import com.example.testyourself.utils.Constant
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_exam_test.*
-import kotlinx.android.synthetic.main.fragment_exam_test.view.*
-import kotlinx.android.synthetic.main.fragment_student_home.*
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class ExamTestFragment : Fragment() {
     private var _binding: FragmentExamTestBinding? = null
     private val binding get() = _binding!!
-    private lateinit var examTestLogic : ExamTestLogic
-    private lateinit var viewModel: ExamTestViewModel
+    private val viewModel: ExamTestViewModel by viewModels()
     var myList = mutableListOf<Test>()
     lateinit var result : ExamResult
     var showTest = 0
     private val userAnswerList = hashMapOf<Int,Boolean?>()
     var resultAnswer = ""
     private var answerBoolean : Boolean? = null
-    var student = 3454
+    var student = 1
     var exam = 0
     var testNumber = 0
     var lastRadioButtonItem : RadioButton?=null
     var countDownTimer: CountDownTimer? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,17 +50,11 @@ class ExamTestFragment : Fragment() {
         _binding = FragmentExamTestBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        examTestLogic = ExamTestLogic(view)
-
-        val viewModelProviderFactory= ExamTestModelProviderFactory(ApiRepository())
-        viewModel = ViewModelProviders.of(this, viewModelProviderFactory ).get(ExamTestViewModel::class.java)
         observeLiveData()
         super.onViewCreated(view, savedInstanceState)
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
         object: OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
@@ -81,8 +62,20 @@ class ExamTestFragment : Fragment() {
             }
         } )
 
+        binding.answerBtn.setOnClickListener {
+            testAnswer(myList)
+        }
 
-
+        binding.radioGroup2.setOnCheckedChangeListener{ group, checkedId ->
+            val radioButton: RadioButton = group.findViewById(checkedId) as RadioButton
+            if (lastRadioButtonItem !=radioButton){
+                radioButton.setBackgroundColor(Color.GREEN)
+                lastRadioButtonItem?.let {
+                    group.findViewById<RadioButton>(it.id).background = ContextCompat.getDrawable(requireContext(), R.color.purple_700)
+                }
+                lastRadioButtonItem=radioButton
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -95,17 +88,11 @@ class ExamTestFragment : Fragment() {
         viewModel.getTest(argument as Int)
         exam = argument
         viewModel.tests.observe(viewLifecycleOwner, Observer { a->
-
             a?.let {tests->
                 myList.addAll(tests)
                 showTestFun()
-                answer_btn.setOnClickListener {
-                    testAnswer(myList)
-                }
-
             }
         })
-
     }
 
     fun postResultTest(examResult: ExamResult){
@@ -115,15 +102,12 @@ class ExamTestFragment : Fragment() {
     //test show function
     fun showTestFun() {
         clearCheck()
-
         val test = myList[showTest]
         val answers = arrayListOf(
             test.testTrueAnswer, test.testFalseAnswer1,
             test.testFalseAnswer2, test.testFalseAnswer3
         )
         answers.shuffle()
-
-
         test.testImage?.let {
             Picasso.get().load(it).into(binding.examTestImg)
         }
@@ -135,18 +119,6 @@ class ExamTestFragment : Fragment() {
         binding.radioGroup24.text = answers[3]
         timer()
         testNumber = showTest + 1
-
-        binding.radioGroup2.setOnCheckedChangeListener{ group, checkedId ->
-            val radioButton: RadioButton = group.findViewById(checkedId) as RadioButton
-            if (lastRadioButtonItem !=radioButton){
-                radioButton.setBackgroundColor(Color.GREEN)
-                lastRadioButtonItem?.let {
-                    group.findViewById<RadioButton>(it.id).background = ContextCompat.getDrawable(requireContext(), R.color.purple_700)
-                }
-                lastRadioButtonItem=radioButton
-            }
-
-        }
 
     }
 
@@ -186,8 +158,6 @@ class ExamTestFragment : Fragment() {
         }
 
         answerBoolean = userAnswerList[showTest+1]
-        Log.e("asnwers",userAnswerList.toString())
-        Log.e("asnwers1",answerBoolean.toString())
         showTest++
         countDownTimer?.cancel()
 
@@ -196,10 +166,9 @@ class ExamTestFragment : Fragment() {
             answerBoolean = answerBoolean,
             student = student,
             exam = exam,
-            testNumer = testNumber
+            testNumer = myList[testNumber-1].testId!!
         )
         postResultTest(result)
-
         if (showTest < myList.size) {
             clearCheck()
             showTestFun()
@@ -221,28 +190,23 @@ class ExamTestFragment : Fragment() {
         countDownTimer?.cancel()
         this.context?.let {
             AlertDialog.Builder(it)
-                .setTitle("Imtahan bitdi")
-                .setMessage("Nəticələri görməyə hazırsınız?")
+                .setTitle(Constant.EXAM_END)
+                .setMessage(Constant.SHOW_RESULT)
                 .setCancelable(false)
-                .setPositiveButton("he"
+                .setPositiveButton(Constant.OK
                 ) { dialog, which ->
-                    val bundle = bundleOf(
-                        "testResult" to userAnswerList
-                    )
-                    findNavController().navigate(
-                        R.id.action_examTestFragment_to_resultFragment,
-                        bundle
-                    )
+                    val bundle = bundleOf("testResult" to userAnswerList)
+                    findNavController().navigate(R.id.action_examTestFragment_to_resultFragment, bundle)
                 }.show()
         }
     }
 
 
     fun clearCheck(){
-        var id: Int = binding.radioGroup2.checkedRadioButtonId
+        val id: Int = binding.radioGroup2.checkedRadioButtonId
         if (id!=-1){
             val radio:RadioButton = requireView().findViewById(id)
-            radio.background = this?.let { it.context?.let { it1 -> ContextCompat.getDrawable(it1, R.color.purple_700) } }
+            radio.background = this.context?.let { it1 -> ContextCompat.getDrawable(it1, R.color.purple_700) }
             radio.isChecked = false
             lastRadioButtonItem = null
         }

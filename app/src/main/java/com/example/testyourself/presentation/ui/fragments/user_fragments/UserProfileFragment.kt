@@ -2,7 +2,6 @@ package com.example.testyourself.presentation.ui.fragments.user_fragments
 
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -17,23 +16,22 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.bumptech.glide.Glide
-import com.example.testyourself.data.models.ExamResult
-import com.example.testyourself.data.models.UserProfile
-import com.example.testyourself.data.repository.ApiRepository
+import com.example.testyourself.domain.models.ExamResult
+import com.example.testyourself.domain.models.UserProfile
 import com.example.testyourself.databinding.FragmentUserProfileBinding
 import com.example.testyourself.presentation.viewmodels.UserProfileViewModel
-import com.example.testyourself.presentation.viewmodels.UserProfileViewModelProviderFactory
 import com.example.testyourself.utils.Constant
 import com.google.firebase.auth.FirebaseAuth
-import java.util.jar.Manifest
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class UserProfileFragment : Fragment() {
     private var _binding: FragmentUserProfileBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: UserProfileViewModel
+    private val viewModel: UserProfileViewModel by viewModels()
     lateinit var authFirebase : FirebaseAuth
     lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     var imageUri : Uri? = null
@@ -42,9 +40,6 @@ class UserProfileFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         authFirebase = FirebaseAuth.getInstance()
-        val viewModelProviderFactory= UserProfileViewModelProviderFactory(ApiRepository())
-        viewModel = ViewModelProviders.of(this, viewModelProviderFactory ).get(UserProfileViewModel::class.java)
-
     }
 
     override fun onCreateView(
@@ -208,7 +203,7 @@ class UserProfileFragment : Fragment() {
         })
     }
 
-    private fun filteredAnswerList(list: List<ExamResult>,boolean:Boolean?):Int{
+    private fun filteredAnswerList(list: List<ExamResult>, boolean:Boolean?):Int{
         var a = 0
         for(element in list){
             if (element.answerBoolean==boolean){

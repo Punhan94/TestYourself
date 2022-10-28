@@ -5,22 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testyourself.R
-import com.example.testyourself.data.repository.ApiRepository
+import com.example.testyourself.databinding.FragmentExamListBinding
 import com.example.testyourself.presentation.adapters.ExamAdapter
 import com.example.testyourself.presentation.viewmodels.ExamListViewModel
-import com.example.testyourself.presentation.viewmodels.ExamListViewModelProviderFactory
-import com.example.testyourself.presentation.viewmodels.HomeViewModelProviderFactory
-import kotlinx.android.synthetic.main.fragment_exam_list.*
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class ExamListFragment : Fragment() {
-    private lateinit var viewModel: ExamListViewModel
-    private val examAdapter = ExamAdapter()
+    private var _binding: FragmentExamListBinding?=null
+    private val binding get() = _binding!!
+    private val viewModel: ExamListViewModel by viewModels()
+    private val examAdapter = ExamAdapter(true)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,15 +33,15 @@ class ExamListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_exam_list, container, false)
+        _binding = FragmentExamListBinding.inflate(inflater,container,false)
+        val view = binding.root
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        exam_list_rv.layoutManager = LinearLayoutManager(context)
-        exam_list_rv.adapter = examAdapter
-        val viewModelProviderFactory= ExamListViewModelProviderFactory(ApiRepository())
-        viewModel = ViewModelProviders.of(this, viewModelProviderFactory ).get(ExamListViewModel::class.java)
+        binding.examListRv.layoutManager = LinearLayoutManager(context)
+        binding.examListRv.adapter = examAdapter
         observeLiveData()
 
         examAdapter.onItemClick={
@@ -51,6 +52,10 @@ class ExamListFragment : Fragment() {
         }
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
     private fun observeLiveData(){
         val argument = arguments?.get("lessonId")
@@ -63,5 +68,7 @@ class ExamListFragment : Fragment() {
             }
         })
     }
+
+
 
 }

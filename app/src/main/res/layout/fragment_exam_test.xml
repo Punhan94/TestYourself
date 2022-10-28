@@ -69,10 +69,12 @@
         android:id="@+id/exam_test_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="5dp"
         android:textAlignment="center"
         android:text="Burada test suali olacaqdir"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup2"
         app:layout_constraintTop_toBottomOf="@id/exam_test_img"
         />
 
@@ -83,6 +85,7 @@
         android:layout_marginVertical="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/answer_btn"
         app:layout_constraintTop_toBottomOf="@id/exam_test_question">
 
         <RadioButton
@@ -91,6 +94,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="5dp"
             android:background="@color/purple_700"
+            android:padding="5dp"
             android:text="ilk cavab"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -102,6 +106,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="5dp"
             android:background="@color/purple_700"
+            android:padding="5dp"
             android:text="ikinci cavab"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -113,6 +118,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="5dp"
             android:background="@color/purple_700"
+            android:padding="5dp"
             android:text="ucuncu cavab"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -125,6 +131,7 @@
             android:layout_marginVertical="5dp"
             android:background="@color/purple_700"
             android:text="dorduncu cavab"
+            android:padding="5dp"
             android:textColor="@color/white"
             android:textSize="20sp"
             />
@@ -145,12 +152,12 @@
         android:id="@+id/answer_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="tesdiqle"
         android:layout_marginTop="30dp"
+        android:text="tesdiqle"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/aciq_test"
-         />
+        app:layout_constraintTop_toBottomOf="@+id/aciq_test" />
 
 
 

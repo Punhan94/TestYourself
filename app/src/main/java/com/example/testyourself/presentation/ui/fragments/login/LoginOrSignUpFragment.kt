@@ -1,38 +1,21 @@
 package com.example.testyourself.presentation.ui.fragments.login
-import android.app.Activity.RESULT_OK
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.result.ActivityResultCallback
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.example.testyourself.R
 import com.example.testyourself.data.repository.FirebaseInstanceRepository
 import com.example.testyourself.databinding.FragmentLoginOrSignInBinding
-import com.example.testyourself.presentation.app.MainActivity
 import com.example.testyourself.presentation.viewmodels.UserRegisterViewModel
-import com.example.testyourself.utils.LoadingDialog
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_main.*
-import javax.xml.transform.Result
 
 
 class LoginOrSignUpFragment : Fragment() {

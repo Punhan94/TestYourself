@@ -16,9 +16,9 @@
     <string name="finished_OnBoarding_btn">Başla</string>
     <string name="student">Şagird</string>
     <string name="teacher">Müəllim</string>
-    <string name="new_exam">Yeni sınaq</string>
-    <string name="student_group">Gruplara</string>
-    <string name="result_exams">Nəticələri</string>
+    <string name="exams">Sınaqlar</string>
+    <string name="student_group">Qruplar</string>
+    <string name="result_exams">Nəticələr</string>
     <string name="open">Ac</string>
     <string name="close">Bagla</string>
     <string name="home">Əsas</string>
@@ -34,4 +34,12 @@
     <string name="age">18</string>
     <string name="confirm">Təsdiq</string>
     <string name="cancel">Ləğv</string>
+    <string name="test_number">Test 1</string>
+    <string name="write_test_question">Test sualını yazın</string>
+    <string name="write_test_true_answer">Test düzgün cavabını yazın</string>
+    <string name="write_test_false_answer">Test səhv cavabını yazın</string>
+    <string name="test_time">Test üçün vaxt təyin edin saniyə ilə</string>
+    <string name="next">Növbəti</string>
+    <string name="new_test">Yeni test əlavə edirsiniz</string>
+
 </resources>

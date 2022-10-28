@@ -4,16 +4,20 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testyourself.data.models.Exam
-import com.example.testyourself.data.repository.ApiRepository
+import com.example.testyourself.domain.models.Exam
+import com.example.testyourself.domain.repositories.ExamApiRepository
+import com.example.testyourself.domain.usecases.exam_api_usecase.GetAllExamUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ExamListViewModel(
-    private val repository: ApiRepository
+@HiltViewModel
+class ExamListViewModel @Inject constructor(
+    private val repository: ExamApiRepository
 ):ViewModel() {
     val exam : MutableLiveData<List<Exam>> = MutableLiveData()
     var arg : Int ? = null
-
+    private val getAllExamUseCase: GetAllExamUseCase = GetAllExamUseCase(repository)
 
     init {
         getExam()
@@ -25,7 +29,7 @@ class ExamListViewModel(
 
     private suspend fun getDataFromAPIExam() {
         val newList = mutableListOf<Exam>()
-        val exams = repository.getAllExam()
+        val exams = getAllExamUseCase.getAllExam()
         if (exams.isSuccessful) {
             exams.body()?.let { myexams->
                 for (i in myexams){
