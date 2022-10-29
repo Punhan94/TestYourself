@@ -14,6 +14,7 @@ import com.example.testyourself.databinding.FragmentLoginOrSignInBinding
 import com.example.testyourself.presentation.viewmodels.ObservableData.createUserJobLiveData
 import com.example.testyourself.presentation.viewmodels.ObservableData.createUserLiveData
 import com.example.testyourself.presentation.viewmodels.ObservableData.loginUserJobCheckLiveData
+import com.example.testyourself.presentation.viewmodels.ObservableData.loginUserLiveData
 import com.example.testyourself.presentation.viewmodels.UserRegisterViewModel
 import com.example.testyourself.utils.Constant
 import com.example.testyourself.utils.LoadingDialog
@@ -41,10 +42,6 @@ class LoginOrSignUpFragment : Fragment() {
         _binding = FragmentLoginOrSignInBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -110,16 +107,16 @@ class LoginOrSignUpFragment : Fragment() {
             binding.registerButton.isClickable = false
         }
         else if(!emailBool){
-            Toast.makeText(context, Constant.EMAIL_VALIDATE, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.email_validate, Toast.LENGTH_SHORT).show()
         }
         else if (!passwordBool) {
-            Toast.makeText(context, Constant.PASSWORD_VALIDATE, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.password_validate, Toast.LENGTH_SHORT).show()
         }
         else if(firstPassword != secondPassword){
-            Toast.makeText(context, Constant.PASSWORD_REPEAT_PROBLEM, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.password_repeat_problem, Toast.LENGTH_SHORT).show()
         }
         else{
-            Toast.makeText(context, Constant.FORM_PROBLEM, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.form_problem, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -139,11 +136,11 @@ class LoginOrSignUpFragment : Fragment() {
             binding.signInButton.isClickable = false
             viewModel.loginUserFirebase(email, firstPassword)
         } else if(!emailBool){
-            Toast.makeText(context,Constant.EMAIL_VALIDATE , Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,R.string.email_validate , Toast.LENGTH_SHORT).show()
         } else if (!passwordBool) {
-            Toast.makeText(context, Constant.PASSWORD_VALIDATE, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.password_validate, Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "Xəta bas verdi", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.problem, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -170,6 +167,17 @@ class LoginOrSignUpFragment : Fragment() {
 
 
    private fun observeFirebaseResult(){
+       createUserLiveData.observe(viewLifecycleOwner){
+           when(it){
+               is Resource.Error->{
+
+               }
+               else->{
+                   binding.registerButton.isClickable=true
+                   Toast.makeText(requireContext(), "Xəta baş verdi", Toast.LENGTH_SHORT).show()
+               }
+           }
+       }
        createUserJobLiveData?.observe(viewLifecycleOwner) {
            when (it) {
                is Resource.Loading -> {
@@ -184,6 +192,18 @@ class LoginOrSignUpFragment : Fragment() {
                else -> {
                    if (loading.isDialog.isShowing)
                    loading.dismiss()
+                   binding.registerButton.isClickable=true
+                   Toast.makeText(requireContext(), "Xəta baş verdi", Toast.LENGTH_SHORT).show()
+               }
+           }
+       }
+
+       loginUserLiveData.observe(viewLifecycleOwner){
+           when(it){
+               is Resource.Error->{
+
+               }
+               else->{
                    binding.registerButton.isClickable=true
                    Toast.makeText(requireContext(), "Xəta baş verdi", Toast.LENGTH_SHORT).show()
                }

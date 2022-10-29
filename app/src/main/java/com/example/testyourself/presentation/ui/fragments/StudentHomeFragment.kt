@@ -173,6 +173,8 @@ class StudentHomeFragment : Fragment() {
     fun exituser(){
         ObservableData.loginUserJobCheckLiveData= MutableLiveData<Resource<String>>()
         ObservableData.createUserJobLiveData=MutableLiveData<Resource<String>>()
+        ObservableData.loginUserLiveData= MutableLiveData<Resource<String>>()
+        ObservableData.createUserLiveData=MutableLiveData<Resource<String>>()
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.app_exit))
             .setMessage("Çıxmaq istədiyinizdən əminsiniz?")

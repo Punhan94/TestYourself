@@ -41,5 +41,10 @@
     <string name="next">Növbəti</string>
     <string name="new_test">Yeni test əlavə edirsiniz</string>
     <string name="app_exit">Çıxış</string>
+    <string name="form_problem">Formu düzgün doldurun</string>
+    <string name="password_validate">Şifrədə ən azı 7 simvol olmalıdır</string>
+    <string name="password_repeat_problem">Şifrə ilə təkrar şifrə uyğun deyil</string>
+    <string name="email_validate">Emaili düzgün yazın</string>
+    <string name="problem">Xəta bas verdi</string>
 
 </resources>
