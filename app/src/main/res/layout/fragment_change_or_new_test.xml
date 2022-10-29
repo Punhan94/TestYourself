@@ -20,7 +20,7 @@
         />
 
     <TextView
-        android:id="@+id/textNumber"
+        android:id="@+id/testNumber"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/test_number"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:hint="@string/write_test_question"
-        app:layout_constraintTop_toBottomOf="@id/textNumber"
+        app:layout_constraintTop_toBottomOf="@id/testNumber"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
@@ -99,7 +99,7 @@
         />
 
     <Button
-        android:id="@+id/textConfirm"
+        android:id="@+id/testConfirm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -110,13 +110,14 @@
         />
 
     <Button
+        android:id="@+id/nextTest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/next"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textConfirm"
+        app:layout_constraintTop_toBottomOf="@id/testConfirm"
         />
 
 

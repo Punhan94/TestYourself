@@ -1,5 +1,6 @@
 package com.example.testyourself.presentation.ui.fragments.teacher_fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.lifecycle.Observer
 import com.example.testyourself.databinding.FragmentChangeOrNewTestBinding
 import com.example.testyourself.domain.models.Test
 import com.example.testyourself.presentation.viewmodels.ChangeOrNewTestViewModel
+import com.example.testyourself.utils.Constant
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -41,15 +43,17 @@ class ChangeOrNewTestFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeLiveData()
-        binding.textConfirm.setOnClickListener {
+        binding.testConfirm.setOnClickListener {
             changeOrNewTest()
+        }
+        binding.nextTest.setOnClickListener {
+            showTest +=1
+            showTestFun()
         }
 
     }
 
     private fun changeOrNewTest() {
-        Log.e("examGorundu",exam.toString())
-        Log.e("myListsize",myList.size.toString())
 
         val thisTest = Test(
             testQuestion = binding.testQuestionEditText.text.toString(),
@@ -65,6 +69,9 @@ class ChangeOrNewTestFragment : Fragment() {
         }else{
             viewModel.patchOrPost(-1,0,thisTest)
         }
+
+        showTest +=1
+        showTestFun()
     }
 
     private fun observeLiveData(){
@@ -77,10 +84,23 @@ class ChangeOrNewTestFragment : Fragment() {
         })
     }
 
+    @SuppressLint("SetTextI18n")
     fun showTestFun(){
-        test = myList[showTest]
+        Log.e("myListSize",myList.size.toString())
+        Log.e("showtest",showTest.toString())
+        if (myList.size != 0 && myList.size>showTest){
+            checkedMyList()
+        }else{
+            clearTest()
+            binding.thisNewTest.visibility = View.VISIBLE
+            binding.nextTest.visibility = View.GONE
+        }
+        binding.testNumber.text = Constant.TEST_NUM + " " + (showTest+1).toString()
+    }
 
-        if (myList.size>showTest){
+
+    fun checkedMyList(){
+            test = myList[showTest]
             binding.testQuestionEditText.setText(test.testQuestion)
             binding.testTrueAnswer.setText(test.testTrueAnswer)
             binding.testFalseAnswer1.setText(test.testFalseAnswer1)
@@ -88,11 +108,16 @@ class ChangeOrNewTestFragment : Fragment() {
             binding.testFalseAnswer3.setText(test.testFalseAnswer3)
             binding.oneTestSecond.setText(test.oneTestSecond.toString())
             binding.thisNewTest.visibility = View.GONE
-        }else{
-            binding.thisNewTest.visibility = View.VISIBLE
-        }
-
     }
 
+    fun clearTest(){
+        binding.testQuestionEditText.text.clear()
+        binding.testTrueAnswer.text.clear()
+        binding.testFalseAnswer1.text.clear()
+        binding.testFalseAnswer2.text.clear()
+        binding.testFalseAnswer3.text.clear()
+        binding.oneTestSecond.getText().clear()
+        binding.thisNewTest.visibility = View.GONE
+    }
 
 }

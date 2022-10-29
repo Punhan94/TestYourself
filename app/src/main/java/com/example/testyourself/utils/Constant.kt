@@ -22,4 +22,5 @@ object Constant {
         const val SHOW_RESULT = "Nəticələri görməyə hazırsınız?"
         const val OK = "hə"
         const val NO = "yox"
+        const val TEST_NUM = "Test No:"
 }

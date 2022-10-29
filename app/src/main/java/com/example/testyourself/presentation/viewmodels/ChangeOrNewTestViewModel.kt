@@ -39,6 +39,7 @@ class ChangeOrNewTestViewModel @Inject constructor(
 
     private suspend fun postNewTest(thisTest: Test){
         postNewTestUseCase.postNewTest(thisTest)
+
     }
 
     private suspend fun patchThisTest(testId: Int,thisTest:Test){
