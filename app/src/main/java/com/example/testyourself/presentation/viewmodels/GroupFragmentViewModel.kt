@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class GroupFragmentViewModel @Inject constructor(
-    private val repository: ExamApiRepository
+    repository: ExamApiRepository
 ): ViewModel() {
     private val getAllUserProfileUseCase: GetAllUserProfileUseCase = GetAllUserProfileUseCase(repository)
     private val getAllStudentUseCase: GetAllStudentUseCase = GetAllStudentUseCase(repository)
@@ -25,18 +25,18 @@ class GroupFragmentViewModel @Inject constructor(
         getAllStudent()
     }
 
-    fun getAllStudent () = viewModelScope.launch {
+    private fun getAllStudent () = viewModelScope.launch {
         getAllStudents()
     }
 
     private suspend fun getAllStudents(){
         val allUserProfile = getAllUserProfileUseCase.invoke()
-        val allstudents = getAllStudentUseCase.invoke()
+        val allStudents = getAllStudentUseCase.invoke()
         if (allUserProfile.isSuccessful) {
             userProfile.postValue(allUserProfile.body())
         }
-        if (allstudents.isSuccessful){
-            students.postValue(allstudents.body())
+        if (allStudents.isSuccessful){
+            students.postValue(allStudents.body())
         }
 
     }

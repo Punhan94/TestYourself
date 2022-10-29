@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testyourself.databinding.FragmentGroupBinding
 import com.example.testyourself.presentation.adapters.StudentAdapter
@@ -32,11 +31,10 @@ class GroupFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentGroupBinding.inflate(inflater,container,false)
-        val view = binding.root
-        return view
+        _binding = FragmentGroupBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,10 +51,10 @@ class GroupFragment : Fragment() {
     }
 
     private fun observeLiveData(){
-        viewModel.userProfile.observe(viewLifecycleOwner, Observer { a->
+        viewModel.userProfile.observe(viewLifecycleOwner) { a->
             a?.let {
                 studentAdapter.differ.submitList(it)
             }
-        })
+        }
     }
 }

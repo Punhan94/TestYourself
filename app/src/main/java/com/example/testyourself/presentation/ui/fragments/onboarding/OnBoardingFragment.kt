@@ -11,15 +11,6 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_on_boarding.view.*
 
 class OnBoardingFragment : Fragment() {
-    lateinit var authFirebase : FirebaseAuth
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        authFirebase = FirebaseAuth.getInstance()
-        var user = authFirebase.currentUser
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,14 +22,6 @@ class OnBoardingFragment : Fragment() {
         val adapter = MainViewPagerAdapter(parentFragmentManager,lifecycle,fragmentList)
         view.mainViewPager.adapter = adapter
         return view
-
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-
-
 
 }

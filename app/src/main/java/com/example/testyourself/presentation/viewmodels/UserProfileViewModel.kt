@@ -52,14 +52,13 @@ class UserProfileViewModel @Inject constructor(
         }
     }
 
-
     private suspend fun patchUserVM(userProfile: UserProfile, studentId:Int){
         val a = patchUserProfileUseCase.invoke(studentId,
             id = userProfile.id!!.toInt(),
             student = userProfile.student!!.toInt(),
             firstName = userProfile.firstName.toString(),
             lastName = userProfile.lastName.toString(),
-            age = userProfile.age?.toInt() ?: 10
+            age = userProfile.age ?: 10
         )
         Log.e("response",a.message())
         Log.e("succes",a.isSuccessful.toString())

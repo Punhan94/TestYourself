@@ -1,10 +1,7 @@
 package com.example.testyourself.presentation.viewmodels
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.testyourself.data.repository.FirebaseInstanceRepository
-import com.example.testyourself.presentation.viewmodels.ObservableData.createUserLiveData
-import com.example.testyourself.utils.Resource
 
 class UserRegisterViewModel:ViewModel() {
 

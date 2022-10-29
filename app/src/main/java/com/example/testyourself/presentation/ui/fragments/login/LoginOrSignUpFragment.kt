@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.testyourself.R
-import com.example.testyourself.data.repository.FirebaseInstanceRepository
 import com.example.testyourself.databinding.FragmentLoginOrSignInBinding
 import com.example.testyourself.presentation.viewmodels.ObservableData.createUserJobLiveData
 import com.example.testyourself.presentation.viewmodels.ObservableData.createUserLiveData
@@ -19,8 +20,8 @@ import com.example.testyourself.presentation.viewmodels.UserRegisterViewModel
 import com.example.testyourself.utils.Constant
 import com.example.testyourself.utils.LoadingDialog
 import com.example.testyourself.utils.Resource
-import com.google.firebase.auth.FirebaseAuth
 import java.util.regex.Pattern
+import kotlin.system.exitProcess
 
 
 class LoginOrSignUpFragment : Fragment() {
@@ -30,18 +31,18 @@ class LoginOrSignUpFragment : Fragment() {
     private var loginName : String = ""
     private var passFirst:String = ""
     private var passSecond:String = ""
-    var jobId :Int = 0
-    var loading= LoadingDialog(this)
+    private var jobId :Int = 0
+    private var loading= LoadingDialog(this)
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentLoginOrSignInBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        _binding = FragmentLoginOrSignInBinding.inflate(inflater, container,
+            false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,6 +57,14 @@ class LoginOrSignUpFragment : Fragment() {
         binding.login.setOnClickListener {
             signInFormShow()
         }
+
+        //backpressed
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object: OnBackPressedCallback(true){
+                override fun handleOnBackPressed() {
+                    exituser()
+                }
+            } )
 
         //Registration function started
         binding.registerButton.setOnClickListener {
@@ -86,10 +95,21 @@ class LoginOrSignUpFragment : Fragment() {
 
         // Forgot password page Navigation
         binding.forgotPassword.setOnClickListener {
-            findNavController().navigate(R.id.action_loginOrSignUpFragment_to_forgotPasswordFragment)
+            findNavController().navigate(
+                R.id.action_loginOrSignUpFragment_to_forgotPasswordFragment)
         }
         observeFirebaseResult()
 
+    }
+
+    private fun exituser() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.app_exit))
+            .setMessage("Çıxmaq istədiyinizdən əminsiniz?")
+            .setCancelable(true)
+            .setNegativeButton(R.string.no) { dialog, which -> }
+            .setPositiveButton(R.string.yes) { dialog, which ->
+                exitProcess(0) }.show()
     }
 
 
@@ -98,11 +118,11 @@ class LoginOrSignUpFragment : Fragment() {
         _binding = null
     }
 
-    fun checkRegisterForm(email:String,firstPassword:String, secondPassword:String){
+    private fun checkRegisterForm(email:String, firstPassword:String, secondPassword:String){
         val emailBool = emailValidation(email)
         val passwordBool = passwordSize(firstPassword)
 
-        if(passwordBool and firstPassword.equals(secondPassword) and emailBool){
+        if(passwordBool and (firstPassword == secondPassword) and emailBool){
             viewModel.createUser(email,firstPassword,jobId)
             binding.registerButton.isClickable = false
         }
@@ -121,14 +141,14 @@ class LoginOrSignUpFragment : Fragment() {
     }
 
     // Registraion Form Show function
-    fun registerFormShow(){
+    private fun registerFormShow(){
         binding.register.setTextColor(Color.WHITE)
         binding.login.setTextColor(Color.BLACK)
         binding.registerLayoutShow.visibility = View.VISIBLE
         binding.signInLayoutShow.visibility = View.GONE
     }
 
-    fun checkSignInForm(email: String, firstPassword: String) {
+    private fun checkSignInForm(email: String, firstPassword: String) {
         val emailBool = emailValidation(email)
         val passwordBool = passwordSize(firstPassword)
 
@@ -145,11 +165,11 @@ class LoginOrSignUpFragment : Fragment() {
     }
 
 
-    fun emailValidation(email: String): Boolean {
+    private fun emailValidation(email: String): Boolean {
         return Pattern.compile(Constant.EMAIL_PATTERN).matcher(email).matches()
     }
 
-    fun passwordSize(password:String):Boolean{
+    private fun passwordSize(password:String):Boolean{
         var size = 0
         for (i in password){
             size++
@@ -158,7 +178,7 @@ class LoginOrSignUpFragment : Fragment() {
     }
 
     //Sign up Form Show Function
-    fun signInFormShow() {
+    private fun signInFormShow() {
         binding.login.setTextColor(Color.WHITE)
         binding.register.setTextColor(Color.BLACK)
         binding.registerLayoutShow.visibility = View.GONE
@@ -232,7 +252,7 @@ class LoginOrSignUpFragment : Fragment() {
        }
    }
 
-    fun signUpLogicNavigate(job: String) {
+    private fun signUpLogicNavigate(job: String) {
         if (job == "teacher") {
        findNavController()
                 .navigate(R.id.action_loginOrSignUpFragment_to_teacherHomeFragment)

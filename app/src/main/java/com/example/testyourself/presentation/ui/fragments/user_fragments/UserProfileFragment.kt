@@ -1,17 +1,14 @@
 package com.example.testyourself.presentation.ui.fragments.user_fragments
-
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -45,11 +42,10 @@ class UserProfileFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
 
     }
 
@@ -84,7 +80,7 @@ class UserProfileFragment : Fragment() {
         _binding = null
     }
 
-    fun chooseImage(){
+    private fun chooseImage(){
         if(ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.READ_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),1)
@@ -97,6 +93,7 @@ class UserProfileFragment : Fragment() {
 
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -111,20 +108,21 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    fun registerActivityForResult(){
-        activityResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult(),
-        ActivityResultCallback { result ->
+    private fun registerActivityForResult(){
+        activityResultLauncher = registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) { result ->
             val resultCode = result.resultCode
             val imageData = result.data
 
-            if (resultCode == RESULT_OK && imageData != null){
+            if (resultCode == RESULT_OK && imageData != null) {
                 imageUri = imageData.data
 
                 Glide.with(requireContext())
                     .load(imageUri)
                     .into(binding.profileUserImage)
             }
-        })
+        }
     }
 
     fun userDetailShow(myBoolean: Boolean){
@@ -139,7 +137,7 @@ class UserProfileFragment : Fragment() {
         }
     }
 
-    fun userProfilePost(){
+    private fun userProfilePost(){
         var userLast = UserProfile()
         var userPATCH = UserProfile()
         viewModel.userProfile.observe(viewLifecycleOwner, Observer {
@@ -168,10 +166,11 @@ class UserProfileFragment : Fragment() {
     private fun observeLiveData(){
 
         viewModel.getAboutUser(Constant.STUDENT_ID?:1)
-        viewModel.userProfile.observe(viewLifecycleOwner, Observer { a->
-            a?.let { userProfile->
-                if (!userProfile.lastName.isNullOrEmpty() and !userProfile.firstName.isNullOrEmpty()){
-                    binding.userProfileFullName.text = userProfile.firstName +" "+ userProfile.lastName
+        viewModel.userProfile.observe(viewLifecycleOwner) { a ->
+            a?.let { userProfile ->
+                if (!userProfile.lastName.isNullOrEmpty() and !userProfile.firstName.isNullOrEmpty()) {
+                    binding.userProfileFullName.text =
+                        userProfile.firstName + " " + userProfile.lastName
                 }
                 userProfile.age?.let {
                     binding.userProfileAge.text = userProfile.age.toString()
@@ -190,15 +189,18 @@ class UserProfileFragment : Fragment() {
                 }
 
             }
-        })
+        }
 
-        viewModel.userAllAnswer.observe(viewLifecycleOwner, Observer { a->
+        viewModel.userAllAnswer.observe(viewLifecycleOwner) { a ->
             a?.let {
-                binding.textViewAllTrue.text = Constant.TRUE_ANSWER_COUNT + filteredAnswerList(it,true).toString()
-                binding.textViewAllFalse.text = Constant.FALSE_ANSWER_COUNT + filteredAnswerList(it,false).toString()
-                binding.textViewAllNull.text = Constant.NULL_ANSWER_COUNT + filteredAnswerList(it,null).toString()
+                binding.textViewAllTrue.text =
+                    Constant.TRUE_ANSWER_COUNT + filteredAnswerList(it, true).toString()
+                binding.textViewAllFalse.text =
+                    Constant.FALSE_ANSWER_COUNT + filteredAnswerList(it, false).toString()
+                binding.textViewAllNull.text =
+                    Constant.NULL_ANSWER_COUNT + filteredAnswerList(it, null).toString()
             }
-        })
+        }
     }
 
     private fun filteredAnswerList(list: List<ExamResult>, boolean:Boolean?):Int{

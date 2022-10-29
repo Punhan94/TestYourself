@@ -22,6 +22,9 @@ object Constant {
         const val SHOW_RESULT = "Nəticələri görməyə hazırsınız?"
         const val OK = "hə"
         const val NO = "yox"
+        const val TRUE_STRING="Doğru"
+        const val FALSE_STRING="Səhv"
+        const val NULL_STRING = "Boş"
         const val TEST_NUM = "Test No:"
         const val EMAIL_PATTERN =
                 "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"

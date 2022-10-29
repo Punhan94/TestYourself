@@ -1,5 +1,4 @@
 package com.example.testyourself.presentation.ui.fragments.teacher_fragments
-
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
@@ -8,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import com.example.testyourself.databinding.FragmentChangeOrNewTestBinding
 import com.example.testyourself.domain.models.Test
 import com.example.testyourself.presentation.viewmodels.ChangeOrNewTestViewModel
@@ -17,10 +15,10 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class ChangeOrNewTestFragment : Fragment() {
-    var showTest = 0
+    private var showTest = 0
     var exam = 0
     lateinit var test: Test
-    var myList = mutableListOf<Test>()
+    private var myList = mutableListOf<Test>()
     private var _binding: FragmentChangeOrNewTestBinding? = null
     private val binding get() = _binding!!
     private val viewModel: ChangeOrNewTestViewModel by viewModels()
@@ -34,11 +32,11 @@ class ChangeOrNewTestFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentChangeOrNewTestBinding.inflate(inflater,container,false)
-        val view = binding.root
-        return view    }
+        _binding = FragmentChangeOrNewTestBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -69,19 +67,18 @@ class ChangeOrNewTestFragment : Fragment() {
         }else{
             viewModel.patchOrPost(-1,0,thisTest)
         }
-
         showTest +=1
         showTestFun()
     }
 
     private fun observeLiveData(){
-        viewModel.tests.observe(viewLifecycleOwner, Observer { a->
+        viewModel.tests.observe(viewLifecycleOwner) { a->
 
             a?.let {tests->
                 myList.addAll(tests)
                 showTestFun()
             }
-        })
+        }
     }
 
     @SuppressLint("SetTextI18n")

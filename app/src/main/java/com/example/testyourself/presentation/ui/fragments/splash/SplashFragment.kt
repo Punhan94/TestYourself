@@ -1,5 +1,4 @@
 package com.example.testyourself.presentation.ui.fragments.splash
-
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -7,7 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.example.testyourself.R
 import com.google.firebase.auth.FirebaseAuth
@@ -19,14 +17,10 @@ class SplashFragment : Fragment() {
     private lateinit var firebaseFirestore: FirebaseFirestore
     var jobb = ""
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         authFirebase = FirebaseAuth.getInstance()
         firebaseFirestore = FirebaseFirestore.getInstance()
-
-
-
     }
 
     override fun onCreateView(
@@ -51,7 +45,7 @@ class SplashFragment : Fragment() {
 
     }
 
-    fun authUser(){
+    private fun authUser(){
         authFirebase.currentUser?.let {
             firebaseFirestore.collection("users")
                 .get()
@@ -65,7 +59,6 @@ class SplashFragment : Fragment() {
                             break
                         }
                     }
-
                 }
                 .addOnFailureListener { exception ->
                     Log.e("exception",exception.toString())
@@ -73,13 +66,12 @@ class SplashFragment : Fragment() {
         }
     }
 
-    fun signUpLogicNavigate(job:String){
+    private fun signUpLogicNavigate(job:String){
         if (job=="teacher"){
             findNavController().navigate(R.id.teacherHomeFragment)
         }
         else if(job=="student"){
             findNavController().navigate(R.id.studentHomeFragment)
-            Log.e("navcontroller","isledi")
         }
     }
 

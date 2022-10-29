@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExamTestViewModel @Inject constructor(
-    val repository: ExamApiRepository
+    repository: ExamApiRepository
 ):ViewModel() {
 
     val tests: MutableLiveData<List<Test>> = MutableLiveData()

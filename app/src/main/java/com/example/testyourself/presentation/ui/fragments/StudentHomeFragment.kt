@@ -1,7 +1,6 @@
 package com.example.testyourself.presentation.ui.fragments
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -13,7 +12,6 @@ import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -52,10 +50,9 @@ class StudentHomeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentStudentHomeBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -87,7 +84,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun getAllStudent() {
-        viewModel.allStudent.observe(viewLifecycleOwner, Observer { students ->
+        viewModel.allStudent.observe(viewLifecycleOwner){ students ->
             students?.let {studentList->
                 for (student in studentList) {
                     if (student.studentName == authFirebase.currentUser?.email.toString()) {
@@ -98,9 +95,9 @@ class StudentHomeFragment : Fragment() {
                 if (myStudent.studentName == null) {
                     newStudent()
                 }
-                myStudent.id?.let { it1 -> it1.toInt()?.let { it2 -> findAllUserProfile(it2) } }
+                myStudent.id?.let { it1 -> findAllUserProfile(it1) }
             }
-        })
+        }
     }
 
     private fun newStudent() {
@@ -112,7 +109,7 @@ class StudentHomeFragment : Fragment() {
     }
 
     private fun findAllUserProfile(studId: Int){
-        viewModel.usersProfile.observe(viewLifecycleOwner, Observer { users->
+        viewModel.usersProfile.observe(viewLifecycleOwner) { users->
             var bool = false
             for (user in users){
                 if (user.student == studId){
@@ -124,15 +121,14 @@ class StudentHomeFragment : Fragment() {
             }else{
                 newUser(studId)
             }
-
-        })
+        }
     }
 
 
     @SuppressLint("SetTextI18n")
     private fun myFun(studId: Int) {
         viewModel.getAboutUser(studId)
-        viewModel.userProfile.observe(viewLifecycleOwner, Observer { a ->
+        viewModel.userProfile.observe(viewLifecycleOwner){ a ->
             a?.let {
                 myUserProfile = a
                 if (!it.lastName.isNullOrEmpty() and !it.firstName.isNullOrEmpty()){
@@ -146,7 +142,7 @@ class StudentHomeFragment : Fragment() {
                 }
                 //Picasso.get().load(it.first().image).into(binding.studentDrawerLayout.studentImage)
             }
-        })
+        }
     }
 
 
@@ -179,16 +175,11 @@ class StudentHomeFragment : Fragment() {
             .setTitle(getString(R.string.app_exit))
             .setMessage("Çıxmaq istədiyinizdən əminsiniz?")
             .setCancelable(true)
-            .setNegativeButton("yox", object : DialogInterface.OnClickListener {
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                }
-            })
-            .setPositiveButton("he", object : DialogInterface.OnClickListener {
-                override fun onClick(dialog: DialogInterface?, which: Int) {
-                    authFirebase.signOut()
-                    findNavController().navigate(R.id.loginOrSignUpFragment)
-                }
-            }).show()
+            .setNegativeButton(R.string.no) { dialog, which -> }
+            .setPositiveButton(R.string.yes) { dialog, which ->
+                authFirebase.signOut()
+                findNavController().navigate(R.id.loginOrSignUpFragment)
+            }.show()
     }
 
 }

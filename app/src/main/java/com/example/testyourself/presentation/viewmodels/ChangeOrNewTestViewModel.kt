@@ -14,37 +14,31 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChangeOrNewTestViewModel @Inject constructor(
-    private val repository: ExamApiRepository
+    repository: ExamApiRepository
 ):ViewModel() {
     val tests: MutableLiveData<List<Test>> = MutableLiveData()
     private val getAllExamTestsUseCase: GetAllExamTestsUseCase = GetAllExamTestsUseCase(repository)
     private val patchExamTestsUseCase: PatchExamTestUseCase = PatchExamTestUseCase(repository)
     private val postNewTestUseCase: PostNewTestUseCase = PostNewTestUseCase(repository)
 
-
-
     fun getTest(myId:Int)= viewModelScope.launch {
         getDataFromAPITest(myId)
     }
 
     fun patchOrPost(showTest:Int,testId:Int,thisTest: Test) = viewModelScope.launch{
-        if (showTest>=0){
-            patchThisTest(testId,thisTest)
-        }else{
-            postNewTest(thisTest)
-        }
+        if (showTest>=0){ patchThisTest(testId,thisTest) }
+        else{ postNewTest(thisTest) }
     }
 
     private suspend fun postNewTest(thisTest: Test){
         postNewTestUseCase.invoke(thisTest)
-
     }
 
     private suspend fun patchThisTest(testId: Int,thisTest:Test){
         patchExamTestsUseCase.invoke(
             testId,thisTest.testQuestion,thisTest.testTrueAnswer,thisTest.testFalseAnswer1,
-            thisTest.testFalseAnswer2, thisTest.testFalseAnswer3,thisTest.oneTestSecond?.toInt() ?: 30,
-            thisTest.exam
+            thisTest.testFalseAnswer2, thisTest.testFalseAnswer3,
+            thisTest.oneTestSecond ?: 30, thisTest.exam
         )
     }
 

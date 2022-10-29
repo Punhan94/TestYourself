@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import com.example.testyourself.R
 
 class LoadingDialog(val fragment: Fragment) {
-     lateinit var isDialog:AlertDialog
+    lateinit var isDialog:AlertDialog
 
     fun startLoading(){
             val inflater = fragment.layoutInflater
@@ -16,7 +16,6 @@ class LoadingDialog(val fragment: Fragment) {
             isDialog = builder.create()
             if (!isDialog.isShowing)
             isDialog.show()
-
     }
 
     fun dismiss(){

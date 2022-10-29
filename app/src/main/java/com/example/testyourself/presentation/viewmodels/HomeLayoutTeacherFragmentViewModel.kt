@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeLayoutTeacherFragmentViewModel @Inject constructor(
-    private val repository: ExamApiRepository
+    repository: ExamApiRepository
 ):ViewModel() {
     val exams : MutableLiveData<List<Exam>> = MutableLiveData()
     val groups:MutableLiveData<List<Group>> = MutableLiveData()
@@ -25,7 +25,7 @@ class HomeLayoutTeacherFragmentViewModel @Inject constructor(
         getAllTeacherData()
     }
 
-    fun getAllTeacherData() = viewModelScope.launch {
+    private fun getAllTeacherData() = viewModelScope.launch {
         getDataFromAPIExams()
         getDataFromAPIGroup()
     }

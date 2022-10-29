@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserHomeViewModel @Inject constructor(
-    private val repository: ExamApiRepository
+    repository: ExamApiRepository
 ): ViewModel() {
 
     val lesson :MutableLiveData<List<Lesson>> = MutableLiveData()
@@ -23,7 +23,7 @@ class UserHomeViewModel @Inject constructor(
         getLesson()
     }
 
-    fun getLesson() = viewModelScope.launch {
+    private fun getLesson() = viewModelScope.launch {
         getDataFromAPILesson()
     }
 

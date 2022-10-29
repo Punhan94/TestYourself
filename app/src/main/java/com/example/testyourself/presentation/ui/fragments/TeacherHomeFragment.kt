@@ -1,6 +1,4 @@
 package com.example.testyourself.presentation.ui.fragments
-
-import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,14 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
-import androidx.lifecycle.withStateAtLeast
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.example.testyourself.R
 import com.example.testyourself.databinding.FragmentTeacherHomeBinding
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_student_home.*
-import kotlinx.android.synthetic.main.fragment_teacher_home.*
 
 class TeacherHomeFragment : Fragment() {
     lateinit var authFirebase : FirebaseAuth
@@ -26,18 +22,15 @@ class TeacherHomeFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         authFirebase = FirebaseAuth.getInstance()
-
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentTeacherHomeBinding.inflate(inflater,container,false)
-        val view = binding.root
-        return view
+        _binding = FragmentTeacherHomeBinding.inflate(inflater, container, false)
+        return binding.root
 
     }
 
@@ -70,16 +63,11 @@ class TeacherHomeFragment : Fragment() {
                     .setTitle("Çıxış")
                     .setMessage("Çıxmaq istədiyinizdən əminsiniz?")
                     .setCancelable(true)
-                    .setNegativeButton("yox", object : DialogInterface.OnClickListener {
-                        override fun onClick(dialog: DialogInterface?, which: Int) {
-                        }
-                    })
-                    .setPositiveButton("he", object : DialogInterface.OnClickListener {
-                        override fun onClick(dialog: DialogInterface?, which: Int) {
-                            authFirebase.signOut()
-                            findNavController().navigate(R.id.loginOrSignUpFragment)
-                        }
-                    }).show()
+                    .setNegativeButton(R.string.no) { dialog, which -> }
+                    .setPositiveButton(R.string.yes) { dialog, which ->
+                        authFirebase.signOut()
+                        findNavController().navigate(R.id.loginOrSignUpFragment)
+                    }.show()
             }
 
         }

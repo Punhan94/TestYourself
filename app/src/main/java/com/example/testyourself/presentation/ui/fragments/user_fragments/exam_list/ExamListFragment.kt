@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testyourself.R
@@ -23,19 +22,13 @@ class ExamListFragment : Fragment() {
     private val viewModel: ExamListViewModel by viewModels()
     private val examAdapter = ExamAdapter(true)
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentExamListBinding.inflate(inflater,container,false)
-        val view = binding.root
-        return view
+        _binding = FragmentExamListBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -62,11 +55,11 @@ class ExamListFragment : Fragment() {
         argument?.let {
             viewModel.arg = it as Int
         }
-        viewModel.exam.observe(viewLifecycleOwner, Observer { a->
+        viewModel.exam.observe(viewLifecycleOwner) { a ->
             a?.let {
                 examAdapter.differ.submitList(it)
             }
-        })
+        }
     }
 
 

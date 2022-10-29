@@ -46,5 +46,13 @@
     <string name="password_repeat_problem">Şifrə ilə təkrar şifrə uyğun deyil</string>
     <string name="email_validate">Emaili düzgün yazın</string>
     <string name="problem">Xəta bas verdi</string>
+    <string name="yes">Hə</string>
+    <string name="no">Yox</string>
+    <string name="true_string">Doğru</string>
+    <string name="false_string">Səhv</string>
+    <string name="null_string">Boş</string>
+    <string name="send_new_password">Yeni şifrə emailinizə göndərildi</string>
+
+
 
 </resources>

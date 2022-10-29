@@ -7,15 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.testyourself.R
 import com.example.testyourself.databinding.FragmentResultBinding
-import com.example.testyourself.databinding.FragmentUserProfileBinding
 import com.example.testyourself.utils.Constant
-import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
-import kotlinx.android.synthetic.main.fragment_result.*
 
 
 class ResultFragment : Fragment() {
@@ -25,11 +21,10 @@ class ResultFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         _binding = FragmentResultBinding.inflate(inflater, container, false)
-        val view = binding.root
-        return view
+        return binding.root
     }
 
     @SuppressLint("SetTextI18n")
@@ -37,7 +32,6 @@ class ResultFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val argument = arguments?.get("testResult") as HashMap<Int,Boolean?>
         showPieChart(argument)
-
 
     }
 
@@ -53,32 +47,25 @@ class ResultFragment : Fragment() {
         var truAnswers = 0
         var falseAnswers = 0
         var nullAnswers = 0
-        argument.forEach { t, u ->
-            if (u==true){
-                truAnswers++
-            }
-            else if(u==false){
-                falseAnswers++
-            }
-            else{
-                nullAnswers++
+        argument.forEach { (t, u) ->
+            when (u) {
+                true -> { truAnswers++ }
+                false -> { falseAnswers++ }
+                else -> { nullAnswers++ }
             }
         }
 
-
         //initializing data
         val typeAmountMap: MutableMap<String, Int> = HashMap()
-        typeAmountMap["Dogru"] = truAnswers
-        typeAmountMap["Sehv"] = falseAnswers
-        typeAmountMap["Bos"] = nullAnswers
+        typeAmountMap[Constant.NULL_STRING] = nullAnswers
+        typeAmountMap[Constant.TRUE_STRING] = truAnswers
+        typeAmountMap[Constant.FALSE_STRING] = falseAnswers
 
         //initializing colors for the entries
         val colors: ArrayList<Int> = ArrayList()
+        colors.add(Color.parseColor("#138808"))
         colors.add(Color.parseColor("#F02B79"))
         colors.add(Color.parseColor("#a7a29a"))
-        colors.add(Color.parseColor("#138808"))
-
-
 
         //input data and fit data into pie chart entry
         for (type in typeAmountMap.keys) {

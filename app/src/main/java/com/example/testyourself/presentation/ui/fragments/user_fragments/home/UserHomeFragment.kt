@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testyourself.R
@@ -24,20 +23,13 @@ class UserHomeFragment : Fragment() {
     private val binding get() = _binding!!
 
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentUserHomeBinding.inflate(inflater,container,false)
-        val view = binding.root
-        return view
+        _binding = FragmentUserHomeBinding.inflate(inflater, container, false)
+        return binding.root
 
 
     }
@@ -65,11 +57,11 @@ class UserHomeFragment : Fragment() {
 
     private fun observeLiveData(){
 
-        viewModel.lesson.observe(viewLifecycleOwner, Observer { a->
+        viewModel.lesson.observe(viewLifecycleOwner) { a->
             a?.let {
                 lessonAdapter.differ.submitList(it)
             }
-        })
+        }
     }
 
 }

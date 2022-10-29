@@ -1,5 +1,4 @@
 package com.example.testyourself.presentation.viewmodels
-
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,14 +7,13 @@ import com.example.testyourself.domain.models.UserProfile
 import com.example.testyourself.domain.repositories.ExamApiRepository
 import com.example.testyourself.domain.usecases.exam_api_usecase.*
 import com.example.testyourself.utils.Constant
-import com.example.testyourself.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class StudentHomeViewModel @Inject constructor(
-    private val repository: ExamApiRepository
+    repository: ExamApiRepository
 ):ViewModel() {
     private val getUserProfileUseCase: GetUserProfileUseCase = GetUserProfileUseCase(repository)
     private val getAllUserProfileUseCase: GetAllUserProfileUseCase = GetAllUserProfileUseCase(repository)
@@ -24,16 +22,14 @@ class StudentHomeViewModel @Inject constructor(
     private val getEmailForStudentUseCase: GetEmailForStudentUseCase = GetEmailForStudentUseCase(repository)
     private val postStudentUseCase: PostStudentUseCase = PostStudentUseCase(repository)
     var userProfile : MutableLiveData<UserProfile> = MutableLiveData()
-    var newStudent : MutableLiveData<Student> = MutableLiveData()
+    private var newStudent : MutableLiveData<Student> = MutableLiveData()
     var allStudent : MutableLiveData<List<Student>> = MutableLiveData()
-    var onlyStudent:MutableLiveData<List<Student>> = MutableLiveData()
+    private var onlyStudent:MutableLiveData<List<Student>> = MutableLiveData()
     var usersProfile:MutableLiveData<List<UserProfile>> = MutableLiveData()
 
     init {
         initFun()
     }
-
-
 
     fun getAboutUser (studentId:Int) = viewModelScope.launch {
         getAboutUserProfile(studentId)
@@ -47,7 +43,7 @@ class StudentHomeViewModel @Inject constructor(
         newStudentPOST(student)
     }
 
-    fun initFun() = viewModelScope.launch {
+    private fun initFun() = viewModelScope.launch {
         getAllStudent()
         allUserProfile()
     }

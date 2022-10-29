@@ -1,6 +1,4 @@
 package com.example.testyourself.presentation.viewmodels
-
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ExamListViewModel @Inject constructor(
-    private val repository: ExamApiRepository
+    repository: ExamApiRepository
 ):ViewModel() {
     val exam : MutableLiveData<List<Exam>> = MutableLiveData()
     var arg : Int ? = null
@@ -23,7 +21,7 @@ class ExamListViewModel @Inject constructor(
         getExam()
     }
 
-    fun getExam() = viewModelScope.launch {
+    private fun getExam() = viewModelScope.launch {
         getDataFromAPIExam()
     }
 
@@ -31,15 +29,10 @@ class ExamListViewModel @Inject constructor(
         val newList = mutableListOf<Exam>()
         val exams = getAllExamUseCase.invoke()
         if (exams.isSuccessful) {
-            exams.body()?.let { myexams->
-                for (i in myexams){
-                    Log.e("yoxlama2",i.toString())
-                    Log.e("yoxlama",arg.toString())
-                    if (i.lesson == arg){
-                        newList.add(i)
-                    } else{
-                        exam.postValue(myexams)
-                    }
+            exams.body()?.let { myExams->
+                for (i in myExams){
+                    if (i.lesson == arg){ newList.add(i) }
+                    else{ exam.postValue(myExams) }
                 }
             }
             exam.postValue(newList)
