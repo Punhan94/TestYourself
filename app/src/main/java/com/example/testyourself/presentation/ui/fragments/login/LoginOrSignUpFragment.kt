@@ -174,7 +174,7 @@ class LoginOrSignUpFragment : Fragment() {
                }
                else->{
                    binding.registerButton.isClickable=true
-                   Toast.makeText(requireContext(), "Xəta baş verdi", Toast.LENGTH_SHORT).show()
+                   Toast.makeText(requireContext(), R.string.problem, Toast.LENGTH_SHORT).show()
                }
            }
        }
@@ -193,7 +193,7 @@ class LoginOrSignUpFragment : Fragment() {
                    if (loading.isDialog.isShowing)
                    loading.dismiss()
                    binding.registerButton.isClickable=true
-                   Toast.makeText(requireContext(), "Xəta baş verdi", Toast.LENGTH_SHORT).show()
+                   Toast.makeText(requireContext(), R.string.problem, Toast.LENGTH_SHORT).show()
                }
            }
        }
@@ -205,7 +205,7 @@ class LoginOrSignUpFragment : Fragment() {
                }
                else->{
                    binding.registerButton.isClickable=true
-                   Toast.makeText(requireContext(), "Xəta baş verdi", Toast.LENGTH_SHORT).show()
+                   Toast.makeText(requireContext(), R.string.problem, Toast.LENGTH_SHORT).show()
                }
            }
        }
@@ -225,7 +225,7 @@ class LoginOrSignUpFragment : Fragment() {
                    if (loading.isDialog.isShowing)
                        loading.dismiss()
                    binding.signInButton.isClickable=true
-                   Toast.makeText(requireContext(), "Xəta baş verdi", Toast.LENGTH_SHORT).show()
+                   Toast.makeText(requireContext(), R.string.problem, Toast.LENGTH_SHORT).show()
 
                }
            }
