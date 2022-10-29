@@ -22,8 +22,6 @@ class FirebaseInstanceRepository() : FirebaseRepository {
     }
 
     override fun createUserFirebase(email: String, password: String, jobId: Int) {
-//        loading.startLoading()
-        authFirebase.createUserWithEmailAndPassword(email, password)
         coroutineScope.launch {
             authFirebase.createUserWithEmailAndPassword(email, password)
                 .addOnFailureListener {
@@ -37,7 +35,6 @@ class FirebaseInstanceRepository() : FirebaseRepository {
     }
 
     override fun loginUserFirebase(email: String, password: String) {
-        authFirebase = FirebaseAuth.getInstance()
         coroutineScope.launch {
             authFirebase.signInWithEmailAndPassword(email, password)
                 .addOnFailureListener {
@@ -69,11 +66,11 @@ class FirebaseInstanceRepository() : FirebaseRepository {
 
     override fun createUserJob(email: String, job: String) {
         createUserJobLiveData?.postValue(Resource.Loading())
-        firebaseFirestore = FirebaseFirestore.getInstance()
         val myData = mutableMapOf<String, String>()
         myData[email] = job
         coroutineScope.launch {
-            firebaseFirestore.collection("users").add(myData).addOnSuccessListener {
+            firebaseFirestore.collection("users").add(myData)
+                .addOnSuccessListener {
                 createUserJobLiveData?.postValue(Resource.Success(job))
             }
                 .addOnFailureListener {

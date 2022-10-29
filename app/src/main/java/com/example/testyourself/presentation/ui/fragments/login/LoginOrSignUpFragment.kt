@@ -30,7 +30,7 @@ class LoginOrSignUpFragment : Fragment() {
     private var passFirst:String = ""
     private var passSecond:String = ""
     var jobId :Int = 0
-    private var loading= LoadingDialog(this)
+    var loading= LoadingDialog(this)
 
 
     override fun onCreateView(
@@ -41,8 +41,10 @@ class LoginOrSignUpFragment : Fragment() {
         _binding = FragmentLoginOrSignInBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
+    }
 
-
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -173,20 +175,16 @@ class LoginOrSignUpFragment : Fragment() {
            when (it) {
                is Resource.Loading -> {
                    loading.startLoading()
-                   Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
                }
                is Resource.Success -> {
                    if (loading.isDialog.isShowing)
-                   loading.dismiss()
+                       loading.dismiss()
                    val job= it.data
-                   Toast.makeText(requireContext(), job, Toast.LENGTH_SHORT).show()
                    job?.let { it1 -> signUpLogicNavigate(it1) }
-                   Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
                }
                else -> {
                    if (loading.isDialog.isShowing)
                    loading.dismiss()
-                   Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                }
            }
        }
@@ -195,19 +193,16 @@ class LoginOrSignUpFragment : Fragment() {
            when (it) {
                is Resource.Loading -> {
                    loading.startLoading()
-                   Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
                }
                is Resource.Success -> {
                    if (loading.isDialog.isShowing)
                        loading.dismiss()
                    val job= it.data
-                   Toast.makeText(requireContext(), job, Toast.LENGTH_SHORT).show()
                    job?.let { it1 -> signUpLogicNavigate(it1) }
                }
                else -> {
                    if (loading.isDialog.isShowing)
                        loading.dismiss()
-                   Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
                }
            }
        }

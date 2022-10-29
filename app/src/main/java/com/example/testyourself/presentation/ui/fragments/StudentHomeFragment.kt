@@ -12,6 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
@@ -24,6 +25,7 @@ import com.example.testyourself.presentation.viewmodels.ObservableData
 import com.example.testyourself.presentation.viewmodels.StudentHomeViewModel
 import com.example.testyourself.utils.Constant
 import com.example.testyourself.utils.LoadingDialog
+import com.example.testyourself.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_student_home.*
@@ -169,8 +171,8 @@ class StudentHomeFragment : Fragment() {
     }
 
     fun exituser(){
-        ObservableData.loginUserJobCheckLiveData=null
-        ObservableData.createUserJobLiveData=null
+        ObservableData.loginUserJobCheckLiveData= MutableLiveData<Resource<String>>()
+        ObservableData.createUserJobLiveData=MutableLiveData<Resource<String>>()
         AlertDialog.Builder(requireContext())
             .setTitle(getString(R.string.app_exit))
             .setMessage("Çıxmaq istədiyinizdən əminsiniz?")
