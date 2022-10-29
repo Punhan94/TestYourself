@@ -29,7 +29,7 @@ class ExamListViewModel @Inject constructor(
 
     private suspend fun getDataFromAPIExam() {
         val newList = mutableListOf<Exam>()
-        val exams = getAllExamUseCase.getAllExam()
+        val exams = getAllExamUseCase.invoke()
         if (exams.isSuccessful) {
             exams.body()?.let { myexams->
                 for (i in myexams){

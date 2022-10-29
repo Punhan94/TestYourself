@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
-    private val repository: ExamApiRepository
+    repository: ExamApiRepository
 ):ViewModel() {
 
     var userProfile :MutableLiveData<UserProfile> = MutableLiveData()
@@ -37,7 +37,7 @@ class UserProfileViewModel @Inject constructor(
     }
 
     private suspend fun getAboutUserProfile(studentId:Int){
-        val getUserProfile = getUserProfileUseCase.getUserProfile(studentId)
+        val getUserProfile = getUserProfileUseCase.invoke(studentId)
         if (getUserProfile.isSuccessful) {
             userProfile.postValue(getUserProfile.body())
 
@@ -45,7 +45,7 @@ class UserProfileViewModel @Inject constructor(
     }
 
     private suspend fun getuserAllAnswer(studentId: Int){
-        val allExamResult = getAllExamResultUseCase.getAllExamResult(studentId)
+        val allExamResult = getAllExamResultUseCase.invoke(studentId)
         if (allExamResult.isSuccessful) {
             userAllAnswer.postValue(allExamResult.body())
 
@@ -54,7 +54,7 @@ class UserProfileViewModel @Inject constructor(
 
 
     private suspend fun patchUserVM(userProfile: UserProfile, studentId:Int){
-        val a = patchUserProfileUseCase.patchUserProfile(studentId,
+        val a = patchUserProfileUseCase.invoke(studentId,
             id = userProfile.id!!.toInt(),
             student = userProfile.student!!.toInt(),
             firstName = userProfile.firstName.toString(),

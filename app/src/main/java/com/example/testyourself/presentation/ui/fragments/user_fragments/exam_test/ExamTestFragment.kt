@@ -34,7 +34,7 @@ class ExamTestFragment : Fragment() {
     private val userAnswerList = hashMapOf<Int,Boolean?>()
     var resultAnswer = ""
     private var answerBoolean : Boolean? = null
-    var student = 1
+    var student = Constant.STUDENT_ID?:1
     var exam = 0
     var testNumber = 0
     var lastRadioButtonItem : RadioButton?=null
@@ -95,12 +95,12 @@ class ExamTestFragment : Fragment() {
         })
     }
 
-    fun postResultTest(examResult: ExamResult){
+    private fun postResultTest(examResult: ExamResult){
         viewModel.postResult(examResult)
     }
 
     //test show function
-    fun showTestFun() {
+    private fun showTestFun() {
         clearCheck()
         val test = myList[showTest]
         val answers = arrayListOf(
@@ -123,7 +123,7 @@ class ExamTestFragment : Fragment() {
     }
 
     //test timer
-    fun timer() {
+    private fun timer() {
         val test = myList[showTest]
         val time: Long = test.oneTestSecond?.toLong()?.times(1000) ?: 30000
         testTime( time)
@@ -177,7 +177,7 @@ class ExamTestFragment : Fragment() {
         }
     }
 
-    fun testExitedFun(userAnswerList: HashMap<Int, Boolean?> /* = java.util.HashMap<kotlin.Int, kotlin.Boolean?> */){
+    private fun testExitedFun(userAnswerList: HashMap<Int, Boolean?> ){
         exitTest(userAnswerList)
     }
 
@@ -202,7 +202,7 @@ class ExamTestFragment : Fragment() {
     }
 
 
-    fun clearCheck(){
+    private fun clearCheck(){
         val id: Int = binding.radioGroup2.checkedRadioButtonId
         if (id!=-1){
             val radio:RadioButton = requireView().findViewById(id)

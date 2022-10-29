@@ -20,7 +20,9 @@ import com.example.testyourself.R
 import com.example.testyourself.domain.models.Student
 import com.example.testyourself.domain.models.UserProfile
 import com.example.testyourself.databinding.FragmentStudentHomeBinding
+import com.example.testyourself.presentation.viewmodels.ObservableData
 import com.example.testyourself.presentation.viewmodels.StudentHomeViewModel
+import com.example.testyourself.utils.Constant
 import com.example.testyourself.utils.LoadingDialog
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
@@ -58,7 +60,7 @@ class StudentHomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         getAllStudent()
-        loading.isDisMiss()
+        loading.dismiss()
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
             object: OnBackPressedCallback(true){
@@ -84,10 +86,11 @@ class StudentHomeFragment : Fragment() {
 
     private fun getAllStudent() {
         viewModel.allStudent.observe(viewLifecycleOwner, Observer { students ->
-            students?.let {
-                for (i in it) {
-                    if (i.studentName == authFirebase.currentUser?.email.toString()) {
-                        myStudent = i
+            students?.let {studentList->
+                for (student in studentList) {
+                    if (student.studentName == authFirebase.currentUser?.email.toString()) {
+                        myStudent = student
+                        Constant.STUDENT_ID=myStudent.id
                     }
                 }
                 if (myStudent.studentName == null) {
@@ -166,8 +169,10 @@ class StudentHomeFragment : Fragment() {
     }
 
     fun exituser(){
+        ObservableData.loginUserJobCheckLiveData=null
+        ObservableData.createUserJobLiveData=null
         AlertDialog.Builder(requireContext())
-            .setTitle("Çıxış")
+            .setTitle(getString(R.string.app_exit))
             .setMessage("Çıxmaq istədiyinizdən əminsiniz?")
             .setCancelable(true)
             .setNegativeButton("yox", object : DialogInterface.OnClickListener {

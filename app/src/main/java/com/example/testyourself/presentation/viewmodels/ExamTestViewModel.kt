@@ -1,6 +1,5 @@
 package com.example.testyourself.presentation.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,7 +31,7 @@ class ExamTestViewModel @Inject constructor(
 
 
     private suspend fun getDataFromAPITest(examId:Int){
-        val allExamTests = getAllExamTestsUseCase.getAllExamTests(examId)
+        val allExamTests = getAllExamTestsUseCase.invoke(examId)
         if (allExamTests.isSuccessful) {
             tests.postValue(allExamTests.body())
         }
@@ -41,7 +40,7 @@ class ExamTestViewModel @Inject constructor(
     private suspend fun postDataFromApi(
         examResult: ExamResult
     ){
-        postExamResultUseCase.postExamResult(
+        postExamResultUseCase.invoke(
             examResult
         )
     }

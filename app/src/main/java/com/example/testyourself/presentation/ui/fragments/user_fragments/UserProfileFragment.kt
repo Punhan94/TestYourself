@@ -57,6 +57,7 @@ class UserProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observeLiveData()
         registerActivityForResult()
+
         binding.manageUser.setOnClickListener {
             userDetailShow(true)
         }
@@ -152,8 +153,8 @@ class UserProfileFragment : Fragment() {
         })
 
         userPATCH = UserProfile(
-                id = 1,
-                student = 1,
+                id = userLast.id,
+                student = Constant.STUDENT_ID,
                 firstName = binding.userProfileFirstName.text.toString(),
                 lastName = binding.userProfileLastName.text.toString(),
                 age = binding.userEditTextAge.text.toString().toInt()
@@ -167,7 +168,7 @@ class UserProfileFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun observeLiveData(){
 
-        viewModel.getAboutUser(1)
+        viewModel.getAboutUser(Constant.STUDENT_ID?:1)
         viewModel.userProfile.observe(viewLifecycleOwner, Observer { a->
             a?.let { userProfile->
                 if (!userProfile.lastName.isNullOrEmpty() and !userProfile.firstName.isNullOrEmpty()){
@@ -188,8 +189,6 @@ class UserProfileFragment : Fragment() {
                         .load(userProfile.image)
                         .into(binding.profileUserImage)
                 }
-
-               // Picasso.get().load(it.first().image).into(binding.profileUserImage)
 
             }
         })

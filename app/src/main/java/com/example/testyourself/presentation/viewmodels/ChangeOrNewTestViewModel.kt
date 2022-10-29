@@ -3,12 +3,10 @@ package com.example.testyourself.presentation.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.testyourself.domain.models.ExamResult
 import com.example.testyourself.domain.models.Test
 import com.example.testyourself.domain.repositories.ExamApiRepository
 import com.example.testyourself.domain.usecases.exam_api_usecase.GetAllExamTestsUseCase
 import com.example.testyourself.domain.usecases.exam_api_usecase.PatchExamTestUseCase
-import com.example.testyourself.domain.usecases.exam_api_usecase.PostExamResultUseCase
 import com.example.testyourself.domain.usecases.exam_api_usecase.PostNewTestUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -38,12 +36,12 @@ class ChangeOrNewTestViewModel @Inject constructor(
     }
 
     private suspend fun postNewTest(thisTest: Test){
-        postNewTestUseCase.postNewTest(thisTest)
+        postNewTestUseCase.invoke(thisTest)
 
     }
 
     private suspend fun patchThisTest(testId: Int,thisTest:Test){
-        patchExamTestsUseCase.patchExamTests(
+        patchExamTestsUseCase.invoke(
             testId,thisTest.testQuestion,thisTest.testTrueAnswer,thisTest.testFalseAnswer1,
             thisTest.testFalseAnswer2, thisTest.testFalseAnswer3,thisTest.oneTestSecond?.toInt() ?: 30,
             thisTest.exam
@@ -51,7 +49,7 @@ class ChangeOrNewTestViewModel @Inject constructor(
     }
 
     private suspend fun getDataFromAPITest(examId:Int){
-        val allExamTests = getAllExamTestsUseCase.getAllExamTests(examId)
+        val allExamTests = getAllExamTestsUseCase.invoke(examId)
         if (allExamTests.isSuccessful) {
             tests.postValue(allExamTests.body())
         }

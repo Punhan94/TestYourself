@@ -6,45 +6,32 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.testyourself.R
 import com.example.testyourself.data.repository.FirebaseInstanceRepository
 import com.example.testyourself.databinding.FragmentLoginOrSignInBinding
+import com.example.testyourself.presentation.viewmodels.ObservableData.createUserJobLiveData
+import com.example.testyourself.presentation.viewmodels.ObservableData.createUserLiveData
+import com.example.testyourself.presentation.viewmodels.ObservableData.loginUserJobCheckLiveData
 import com.example.testyourself.presentation.viewmodels.UserRegisterViewModel
+import com.example.testyourself.utils.Constant
+import com.example.testyourself.utils.LoadingDialog
+import com.example.testyourself.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.FirebaseFirestore
+import java.util.regex.Pattern
 
 
 class LoginOrSignUpFragment : Fragment() {
     private var _binding: FragmentLoginOrSignInBinding? = null
     private val binding get() = _binding!!
-    //private lateinit var userRegisterViewModel: UserRegisterViewModel
-    private lateinit var authFirebase : FirebaseAuth
-    private lateinit var firebaseDatabase : FirebaseDatabase
-    private lateinit var databaseReference: DatabaseReference
-    private lateinit var firebaseFirestore: FirebaseFirestore
-//    private lateinit var loginOrSignUpLogic :SignInLogic
-//    private lateinit var userRegisterLogic : UserRegisterLogic
-    lateinit var viewModel: UserRegisterViewModel
-    lateinit var firebaseRepository: FirebaseInstanceRepository
+    val viewModel: UserRegisterViewModel by viewModels()
     private var loginName : String = ""
     private var passFirst:String = ""
     private var passSecond:String = ""
     var jobId :Int = 0
+    private var loading= LoadingDialog(this)
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        firebaseDatabase = FirebaseDatabase.getInstance()
-        databaseReference = firebaseDatabase.getReference()
-        firebaseFirestore = FirebaseFirestore.getInstance()
-        viewModel = ViewModelProviders.of(this).get(UserRegisterViewModel::class.java)
-        authFirebase = FirebaseAuth.getInstance()
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,12 +46,7 @@ class LoginOrSignUpFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        firebaseRepository = FirebaseInstanceRepository(view, this)
-
         super.onViewCreated(view, savedInstanceState)
-//        loginOrSignUpLogic = SignInLogic(view)
-//        userRegisterLogic = UserRegisterLogic(view)
-
 
         //Register form function start
         binding.register.setOnClickListener {
@@ -90,6 +72,7 @@ class LoginOrSignUpFragment : Fragment() {
         binding.signInButton.setOnClickListener {
             loginName = binding.loginName.text.toString().trim()
             passFirst = binding.password.text.toString().trim()
+            binding.signInButton.isClickable=false
             checkSignInForm(
                 loginName, passFirst
             )
@@ -98,13 +81,16 @@ class LoginOrSignUpFragment : Fragment() {
         //RadioButton enabled function
         binding.loginOrSignUpRadioButton.setOnCheckedChangeListener { group, checkedId ->
             binding.registerButton.isEnabled = true
-            jobId = checkedId
+            if (checkedId == R.id.login_or_signUp_first_radio_btn) {
+                jobId = 1
+            }
         }
 
         // Forgot password page Navigation
         binding.forgotPassword.setOnClickListener {
             findNavController().navigate(R.id.action_loginOrSignUpFragment_to_forgotPasswordFragment)
         }
+        observeFirebaseResult()
 
     }
 
@@ -115,24 +101,24 @@ class LoginOrSignUpFragment : Fragment() {
     }
 
     fun checkRegisterForm(email:String,firstPassword:String, secondPassword:String){
-        if( firstPassword.equals(secondPassword) and email.isNotEmpty() ){
-            firebaseRepository.createUserFirebase(email,firstPassword,jobId)
+        val emailBool = emailValidation(email)
+        val passwordBool = passwordSize(firstPassword)
+
+        if(passwordBool and firstPassword.equals(secondPassword) and emailBool){
+            viewModel.createUser(email,firstPassword,jobId)
             binding.registerButton.isClickable = false
         }
-        else if(email.isEmpty()){
-            Toast.makeText(context, "Emaili bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
+        else if(!emailBool){
+            Toast.makeText(context, Constant.EMAIL_VALIDATE, Toast.LENGTH_SHORT).show()
         }
-        else if(firstPassword.isEmpty()){
-            Toast.makeText(context, "Şifrəni bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
+        else if (!passwordBool) {
+            Toast.makeText(context, Constant.PASSWORD_VALIDATE, Toast.LENGTH_SHORT).show()
         }
-        else if(secondPassword.isEmpty()){
-            Toast.makeText(context, "Şifrə tekrari bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
-        }
-        else if(firstPassword.toInt() != secondPassword.toInt()){
-            Toast.makeText(context, "Şifrə ilə təkrar şifrə uyğun deyil", Toast.LENGTH_SHORT).show()
+        else if(firstPassword != secondPassword){
+            Toast.makeText(context, Constant.PASSWORD_REPEAT_PROBLEM, Toast.LENGTH_SHORT).show()
         }
         else{
-            Toast.makeText(context, "Formu duzgun doldurun", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, Constant.FORM_PROBLEM, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -145,19 +131,33 @@ class LoginOrSignUpFragment : Fragment() {
     }
 
     fun checkSignInForm(email: String, firstPassword: String) {
+        val emailBool = emailValidation(email)
+        val passwordBool = passwordSize(firstPassword)
 
-        if (firstPassword.isNotEmpty() and email.isNotEmpty()) {
+        if (passwordBool and emailBool) {
             binding.signInButton.isClickable = false
-            firebaseRepository.loginUserFirebase(email, firstPassword)
-        } else if (email.isEmpty()) {
-            Toast.makeText(context, "Emaili bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
-        } else if (firstPassword.isEmpty()) {
-            Toast.makeText(context, "Şifrəni bos buraxmaq olmaz", Toast.LENGTH_SHORT).show()
+            viewModel.loginUserFirebase(email, firstPassword)
+        } else if(!emailBool){
+            Toast.makeText(context,Constant.EMAIL_VALIDATE , Toast.LENGTH_SHORT).show()
+        } else if (!passwordBool) {
+            Toast.makeText(context, Constant.PASSWORD_VALIDATE, Toast.LENGTH_SHORT).show()
         } else {
-            Toast.makeText(context, "Xeta bas verdi", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "Xəta bas verdi", Toast.LENGTH_SHORT).show()
         }
     }
 
+
+    fun emailValidation(email: String): Boolean {
+        return Pattern.compile(Constant.EMAIL_PATTERN).matcher(email).matches()
+    }
+
+    fun passwordSize(password:String):Boolean{
+        var size = 0
+        for (i in password){
+            size++
+        }
+        return size>6
+    }
 
     //Sign up Form Show Function
     fun signInFormShow() {
@@ -165,6 +165,62 @@ class LoginOrSignUpFragment : Fragment() {
         binding.register.setTextColor(Color.BLACK)
         binding.registerLayoutShow.visibility = View.GONE
         binding.signInLayoutShow.visibility = View.VISIBLE
+    }
+
+
+   private fun observeFirebaseResult(){
+       createUserJobLiveData?.observe(viewLifecycleOwner) {
+           when (it) {
+               is Resource.Loading -> {
+                   loading.startLoading()
+                   Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+               }
+               is Resource.Success -> {
+                   if (loading.isDialog.isShowing)
+                   loading.dismiss()
+                   val job= it.data
+                   Toast.makeText(requireContext(), job, Toast.LENGTH_SHORT).show()
+                   job?.let { it1 -> signUpLogicNavigate(it1) }
+                   Toast.makeText(requireContext(), "Success", Toast.LENGTH_SHORT).show()
+               }
+               else -> {
+                   if (loading.isDialog.isShowing)
+                   loading.dismiss()
+                   Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+               }
+           }
+       }
+
+       loginUserJobCheckLiveData?.observe(viewLifecycleOwner) {
+           when (it) {
+               is Resource.Loading -> {
+                   loading.startLoading()
+                   Toast.makeText(requireContext(), "Loading", Toast.LENGTH_SHORT).show()
+               }
+               is Resource.Success -> {
+                   if (loading.isDialog.isShowing)
+                       loading.dismiss()
+                   val job= it.data
+                   Toast.makeText(requireContext(), job, Toast.LENGTH_SHORT).show()
+                   job?.let { it1 -> signUpLogicNavigate(it1) }
+               }
+               else -> {
+                   if (loading.isDialog.isShowing)
+                       loading.dismiss()
+                   Toast.makeText(requireContext(), "Error", Toast.LENGTH_SHORT).show()
+               }
+           }
+       }
+   }
+
+    fun signUpLogicNavigate(job: String) {
+        if (job == "teacher") {
+       findNavController()
+                .navigate(R.id.action_loginOrSignUpFragment_to_teacherHomeFragment)
+        } else if (job == "student") {
+            findNavController()
+                .navigate(R.id.action_loginOrSignUpFragment_to_studentHomeFragment)
+        }
     }
 
 

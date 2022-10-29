@@ -6,7 +6,7 @@ import com.example.testyourself.domain.repositories.ExamApiRepository
 import retrofit2.Response
 
 class PatchExamTestUseCase(val examApiRepo: ExamApiRepository) {
-    suspend fun patchExamTests(
+    suspend fun invoke(
         id: Int,
         testQuestion: String,
         testTrueAnswer: String,

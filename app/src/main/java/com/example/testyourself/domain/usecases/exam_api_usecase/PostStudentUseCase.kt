@@ -5,7 +5,7 @@ import retrofit2.Response
 
 
 class PostStudentUseCase(val examApiRepo: ExamApiRepository) {
-    suspend fun postStudent( student: Student) : Response<Student> {
+    suspend fun invoke(student: Student) : Response<Student> {
         return examApiRepo.postStudent(student)
     }
 }

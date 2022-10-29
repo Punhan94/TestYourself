@@ -4,7 +4,7 @@ import com.example.testyourself.domain.repositories.FirebaseRepository
 
 class CreateUserUseCase(val firebaseRepo: FirebaseRepository) {
 
-    fun createUserFirebase(email:String,password:String,jobId:Int){
+    fun invoke(email:String, password:String, jobId:Int){
         firebaseRepo.createUserFirebase(email,password,jobId)
     }
 }

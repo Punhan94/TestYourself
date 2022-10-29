@@ -23,4 +23,12 @@ object Constant {
         const val OK = "hə"
         const val NO = "yox"
         const val TEST_NUM = "Test No:"
+        const val EMAIL_VALIDATE = "Emaili düzgün yazın"
+        const val PASSWORD_REPEAT_PROBLEM ="Şifrə ilə təkrar şifrə uyğun deyil"
+        const val PASSWORD_VALIDATE = "Şifrədə ən azı 7 simvol olmalıdır"
+        const val FORM_PROBLEM = "Formu düzgün doldurun"
+        const val EMAIL_PATTERN =
+                "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+
+        var STUDENT_ID:Int?=null
 }

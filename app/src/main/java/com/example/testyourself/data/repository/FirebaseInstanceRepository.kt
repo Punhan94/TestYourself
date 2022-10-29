@@ -1,115 +1,86 @@
 package com.example.testyourself.data.repository
 
-import android.util.Log
-import android.view.View
-import android.widget.Toast
-import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import com.example.testyourself.R
 import com.example.testyourself.domain.repositories.FirebaseRepository
-import com.example.testyourself.utils.LoadingDialog
+import com.example.testyourself.presentation.viewmodels.ObservableData.createUserJobLiveData
+import com.example.testyourself.presentation.viewmodels.ObservableData.createUserLiveData
+import com.example.testyourself.presentation.viewmodels.ObservableData.loginUserJobCheckLiveData
+import com.example.testyourself.presentation.viewmodels.ObservableData.loginUserLiveData
+import com.example.testyourself.utils.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.fragment_login_or_sign_in.view.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class FirebaseInstanceRepository(var view: View, var fragment: Fragment): FirebaseRepository {
+class FirebaseInstanceRepository() : FirebaseRepository {
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
-    lateinit var authFirebase : FirebaseAuth
+    lateinit var authFirebase: FirebaseAuth
     private var firebaseFirestore = FirebaseFirestore.getInstance()
-    private val loading = LoadingDialog(fragment)
 
+    init {
+        authFirebase = FirebaseAuth.getInstance()
+    }
 
     override fun createUserFirebase(email: String, password: String, jobId: Int) {
-        loading.startLoading()
-        //loginOrSignUpLogic = SignInLogic(view)
-        authFirebase = FirebaseAuth.getInstance()
-        //radioBtnID = view.login_or_signUp_radioButton.checkedRadioButtonId
-
+//        loading.startLoading()
+        authFirebase.createUserWithEmailAndPassword(email, password)
         coroutineScope.launch {
-            authFirebase.createUserWithEmailAndPassword(email,password)
+            authFirebase.createUserWithEmailAndPassword(email, password)
                 .addOnFailureListener {
-                    Toast.makeText(fragment.context, "Xeta bas verdi", Toast.LENGTH_SHORT).show()
-                    view.register_button.isClickable = true
-                    loading.isDisMiss()
+                    createUserLiveData.postValue(Resource.Error("Error"))
                 }
-
                 .addOnSuccessListener {
-                    when(jobId){
-                        R.id.login_or_signUp_first_radio_btn->{
-                            createUserJob(email,"teacher")
-                        }
-                        R.id.login_or_signUp_second_radio_btn->{
-                            createUserJob(email,"student")
-                        }
-                    }
+                    createUserLiveData.postValue(Resource.Success("Success"))
+                    createUserJob(email, if (jobId == 0) "student" else "teacher")
                 }
         }
     }
 
     override fun loginUserFirebase(email: String, password: String) {
-        loading.startLoading()
-        //loginOrSignUpLogic = SignInLogic(view)
         authFirebase = FirebaseAuth.getInstance()
-
         coroutineScope.launch {
-            authFirebase.signInWithEmailAndPassword(email,password)
+            authFirebase.signInWithEmailAndPassword(email, password)
                 .addOnFailureListener {
-                    Toast.makeText(fragment.context, "Xeta bas verdi", Toast.LENGTH_SHORT).show()
-                    view.signIn_button.isClickable = true
-                    loading.isDisMiss()
+                    loginUserLiveData.postValue(Resource.Error("Error"))
                 }
                 .addOnSuccessListener {
+                    loginUserLiveData.postValue(Resource.Success("Success"))
                     firebaseFirestoreJobCheck(email)
                 }
         }
     }
 
-    override fun firebaseFirestoreJobCheck(email: String){
-
+    override fun firebaseFirestoreJobCheck(email: String) {
+        loginUserJobCheckLiveData?.postValue(Resource.Loading())
         coroutineScope.launch {
             firebaseFirestore.collection("users")
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-                        val job = document.data.get(email).toString()
-                        signUpLogicNavigate(job)
+                        val job = document.data.get(email)
+                       job?.let {  loginUserJobCheckLiveData?.postValue(Resource.Success(job.toString()))}
                     }
                 }
-                .addOnFailureListener { exception ->
-                    Log.e("exception",exception.toString())
+                .addOnFailureListener {
+                    loginUserJobCheckLiveData?.postValue(Resource.Error("Error"))
                 }
         }
     }
 
-    override fun createUserJob(email:String,job: String){
+    override fun createUserJob(email: String, job: String) {
+        createUserJobLiveData?.postValue(Resource.Loading())
         firebaseFirestore = FirebaseFirestore.getInstance()
-
-        val myData = mutableMapOf<String,String>()
-        myData[email]=job
+        val myData = mutableMapOf<String, String>()
+        myData[email] = job
         coroutineScope.launch {
             firebaseFirestore.collection("users").add(myData).addOnSuccessListener {
-                signUpLogicNavigate(job)
+                createUserJobLiveData?.postValue(Resource.Success(job))
             }
                 .addOnFailureListener {
-                    loading.isDisMiss()
+                    createUserJobLiveData?.postValue(Resource.Error("Error"))
                 }
         }
     }
 
-    fun signUpLogicNavigate(job:String){
-        if (job=="teacher"){
-                loading.isDisMiss()
-                view.findNavController()
-                    .navigate(R.id.action_loginOrSignUpFragment_to_teacherHomeFragment)
-            }
-            else if(job=="student"){
-                loading.isDisMiss()
-                view.findNavController()
-                    .navigate(R.id.action_loginOrSignUpFragment_to_studentHomeFragment)
-            }
 
-    }
 }

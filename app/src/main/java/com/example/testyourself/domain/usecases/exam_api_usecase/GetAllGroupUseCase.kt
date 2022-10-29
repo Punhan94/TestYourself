@@ -6,7 +6,7 @@ import retrofit2.Response
 
 class GetAllGroupUseCase(val examApiRepo: ExamApiRepository) {
 
-    suspend fun getAllGroup(): Response<List<Group>>{
+    suspend fun invoke(): Response<List<Group>>{
         return  examApiRepo.getAllGroup()
     }
 }

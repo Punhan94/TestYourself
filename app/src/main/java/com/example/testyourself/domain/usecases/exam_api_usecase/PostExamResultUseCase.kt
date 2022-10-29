@@ -4,7 +4,7 @@ import com.example.testyourself.domain.repositories.ExamApiRepository
 import retrofit2.Response
 
 class PostExamResultUseCase(val examApiRepo: ExamApiRepository) {
-    suspend fun postExamResult( examResult: ExamResult): Response<ExamResult> {
+    suspend fun invoke(examResult: ExamResult): Response<ExamResult> {
         return examApiRepo.postExamResult(examResult)
     }
 }

@@ -28,7 +28,7 @@ class UserHomeViewModel @Inject constructor(
     }
 
     private suspend fun getDataFromAPILesson() {
-        val allLesson = getAllLessonUseCase.getAllLesson()
+        val allLesson = getAllLessonUseCase.invoke()
         if (allLesson.isSuccessful) {
             lesson.postValue(allLesson.body())
         }

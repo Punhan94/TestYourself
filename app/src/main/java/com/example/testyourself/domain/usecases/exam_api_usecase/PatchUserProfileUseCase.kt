@@ -6,12 +6,12 @@ import com.example.testyourself.domain.repositories.ExamApiRepository
 import retrofit2.Response
 
 class PatchUserProfileUseCase(val examApiRepo: ExamApiRepository) {
-    suspend fun patchUserProfile(studentId: Int,
-                                 id:Int,
-                                 student:Int,
-                                 firstName:String,
-                                 lastName:String,
-                                 age:Int
+    suspend fun invoke(studentId: Int,
+                       id:Int,
+                       student:Int,
+                       firstName:String,
+                       lastName:String,
+                       age:Int
     ) : Response<UserProfile> {
         return examApiRepo.patchUserProfile(studentId,
             id, student ,firstName, lastName,age)

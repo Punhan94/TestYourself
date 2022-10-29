@@ -4,7 +4,7 @@ import com.example.testyourself.domain.repositories.ExamApiRepository
 import retrofit2.Response
 
 class PostNewTestUseCase(val examApiRepo: ExamApiRepository) {
-    suspend fun postNewTest(test: Test): Response<Test> {
+    suspend fun invoke(test: Test): Response<Test> {
         return examApiRepo.postNewTest(test)
     }
 }

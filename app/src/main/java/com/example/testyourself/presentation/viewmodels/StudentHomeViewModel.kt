@@ -7,6 +7,8 @@ import com.example.testyourself.domain.models.Student
 import com.example.testyourself.domain.models.UserProfile
 import com.example.testyourself.domain.repositories.ExamApiRepository
 import com.example.testyourself.domain.usecases.exam_api_usecase.*
+import com.example.testyourself.utils.Constant
+import com.example.testyourself.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -55,44 +57,51 @@ class StudentHomeViewModel @Inject constructor(
     }
 
     private suspend fun getOnlyStudentForEmail(studentName:String){
-        val responseStudent = getEmailForStudentUseCase.getEmailForStudent(studentName)
-        if(responseStudent.isSuccessful and (responseStudent.body() != null)) {
-            onlyStudent.postValue(responseStudent.body())
+        val responseStudent = getEmailForStudentUseCase.invoke(studentName)
+        val body=responseStudent.body()
+        if (responseStudent.isSuccessful) {
+            body?.let {
+                onlyStudent.postValue(it)
+
+            }
         }
     }
 
 
     private suspend fun getAllStudent(){
-        val getAllStudent = getAllStudentUseCase.getAllStudent()
+        val getAllStudent = getAllStudentUseCase.invoke()
         if (getAllStudent.isSuccessful){
             allStudent.postValue(getAllStudent.body())
         }
     }
 
     private suspend fun allUserProfile(){
-        val getAllUserProfile = getAllUserProfileUseCase.getAllUserProfile()
+        val getAllUserProfile = getAllUserProfileUseCase.invoke()
         if (getAllUserProfile.isSuccessful){
             usersProfile.postValue(getAllUserProfile.body())
         }
     }
 
     private suspend fun getAboutUserProfile(studentId:Int){
-        val getUserProfile = getUserProfileUseCase.getUserProfile(studentId)
+        val getUserProfile = getUserProfileUseCase.invoke(studentId)
         if (getUserProfile.isSuccessful) {
             userProfile.postValue(getUserProfile.body())
         }
     }
 
     private suspend fun newStudentPOST(student: Student){
-        val newStudentRepo = postStudentUseCase.postStudent(student)
+        val newStudentRepo = postStudentUseCase.invoke(student)
         if (newStudentRepo.isSuccessful){
             newStudent.postValue(newStudentRepo.body())
-            newStudentRepo.body()?.id?.let { newUserProfileAdd(it.toInt()) }
+            newStudentRepo.body()?.id?.let {
+                newUserProfileAdd(it)
+                Constant.STUDENT_ID=it
+            }
         }
     }
 
     private suspend fun newUserProfileAdd(studentId:Int){
-        postNewUserProfileUseCase.postNewUserProfile(
+        postNewUserProfileUseCase.invoke(
             UserProfile(
                 student = studentId
                 )

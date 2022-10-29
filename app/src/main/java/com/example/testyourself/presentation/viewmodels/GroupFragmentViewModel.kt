@@ -30,8 +30,8 @@ class GroupFragmentViewModel @Inject constructor(
     }
 
     private suspend fun getAllStudents(){
-        val allUserProfile = getAllUserProfileUseCase.getAllUserProfile()
-        val allstudents = getAllStudentUseCase.getAllStudent()
+        val allUserProfile = getAllUserProfileUseCase.invoke()
+        val allstudents = getAllStudentUseCase.invoke()
         if (allUserProfile.isSuccessful) {
             userProfile.postValue(allUserProfile.body())
         }

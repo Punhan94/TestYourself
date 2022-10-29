@@ -4,7 +4,7 @@ import com.example.testyourself.domain.repositories.ExamApiRepository
 import retrofit2.Response
 
 class GetAllExamResultUseCase(val examApiRepo: ExamApiRepository) {
-    suspend fun getAllExamResult(thisExamId: Int) : Response<List<ExamResult>> {
+    suspend fun invoke(thisExamId: Int) : Response<List<ExamResult>> {
         return examApiRepo.getAllExamResult(thisExamId)
     }
 }

@@ -5,7 +5,7 @@ import retrofit2.Response
 import retrofit2.http.Path
 
 class GetUserProfileUseCase(val examApiRepo: ExamApiRepository) {
-    suspend fun getUserProfile(studentId: Int) : Response<UserProfile> {
+    suspend fun invoke(studentId: Int) : Response<UserProfile> {
         return examApiRepo.getUserProfile(studentId)
     }
 }

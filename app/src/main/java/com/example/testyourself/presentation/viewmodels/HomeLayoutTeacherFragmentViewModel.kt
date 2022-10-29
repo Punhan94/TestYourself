@@ -31,14 +31,14 @@ class HomeLayoutTeacherFragmentViewModel @Inject constructor(
     }
 
     private suspend fun getDataFromAPIExams() {
-        val allExam = getAllExamUseCase.getAllExam()
+        val allExam = getAllExamUseCase.invoke()
         if (allExam.isSuccessful) {
             exams.postValue(allExam.body())
         }
     }
 
     private suspend fun getDataFromAPIGroup() {
-        val allGroup = getAllGroupUseCase.getAllGroup()
+        val allGroup = getAllGroupUseCase.invoke()
         if (allGroup.isSuccessful) {
             groups.postValue(allGroup.body())
         }

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Test Yourself</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="first_show_fragment_hello">Test yourself proqramına xoş gəldiniz</string>
     <string name="login">Giriş</string>
@@ -41,5 +40,6 @@
     <string name="test_time">Test üçün vaxt təyin edin saniyə ilə</string>
     <string name="next">Növbəti</string>
     <string name="new_test">Yeni test əlavə edirsiniz</string>
+    <string name="app_exit">Çıxış</string>
 
 </resources>
