@@ -201,7 +201,7 @@ class LoginOrSignUpFragment : Fragment() {
        loginUserLiveData.observe(viewLifecycleOwner){
            when(it){
                is Resource.Error->{
-                   binding.registerButton.isClickable=true
+                   binding.signInButton.isClickable=true
                    Toast.makeText(requireContext(), R.string.problem, Toast.LENGTH_SHORT).show()
                }
                else->{
