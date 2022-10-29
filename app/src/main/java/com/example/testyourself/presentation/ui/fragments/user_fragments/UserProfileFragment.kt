@@ -160,7 +160,6 @@ class UserProfileFragment : Fragment() {
                 age = binding.userEditTextAge.text.toString().toInt()
             )
 
-        Log.e("postUser", userPATCH.toString())
         viewModel.userProfilePATCH(userPATCH,userLast.id!!.toInt())
 
     }

@@ -74,7 +74,6 @@ class LoginOrSignUpFragment : Fragment() {
         binding.signInButton.setOnClickListener {
             loginName = binding.loginName.text.toString().trim()
             passFirst = binding.password.text.toString().trim()
-            binding.signInButton.isClickable=false
             checkSignInForm(
                 loginName, passFirst
             )
