@@ -170,11 +170,11 @@ class LoginOrSignUpFragment : Fragment() {
        createUserLiveData.observe(viewLifecycleOwner){
            when(it){
                is Resource.Error->{
-
-               }
-               else->{
                    binding.registerButton.isClickable=true
                    Toast.makeText(requireContext(), R.string.problem, Toast.LENGTH_SHORT).show()
+               }
+               else->{
+
                }
            }
        }
@@ -201,11 +201,11 @@ class LoginOrSignUpFragment : Fragment() {
        loginUserLiveData.observe(viewLifecycleOwner){
            when(it){
                is Resource.Error->{
-
-               }
-               else->{
                    binding.registerButton.isClickable=true
                    Toast.makeText(requireContext(), R.string.problem, Toast.LENGTH_SHORT).show()
+               }
+               else->{
+
                }
            }
        }
