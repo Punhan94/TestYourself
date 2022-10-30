@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.testyourself.R
 import com.example.testyourself.domain.models.ExamResult
@@ -31,33 +32,35 @@ class ExamTestFragment : Fragment() {
     lateinit var result : ExamResult
     var showTest = 0
     private val userAnswerList = hashMapOf<Int,Boolean?>()
-    private var resultAnswer = ""
+    var resultAnswer = ""
     private var answerBoolean : Boolean? = null
     var student = Constant.STUDENT_ID?:1
     var exam = 0
-    private var testNumber = 0
-    private var lastRadioButtonItem : RadioButton?=null
-    private var countDownTimer: CountDownTimer? = null
+    var testNumber = 0
+    var lastRadioButtonItem : RadioButton?=null
+    var countDownTimer: CountDownTimer? = null
+
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentExamTestBinding.inflate(inflater, container, false)
-        return binding.root
+        val view = binding.root
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         observeLiveData()
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
-        object: OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                exitTest(userAnswerList)
-            }
-        } )
+            object: OnBackPressedCallback(true){
+                override fun handleOnBackPressed() {
+                    exitTest(userAnswerList)
+                }
+            } )
 
         binding.answerBtn.setOnClickListener {
             testAnswer(myList)
@@ -84,12 +87,12 @@ class ExamTestFragment : Fragment() {
         val argument = arguments?.get("examId")
         viewModel.getTest(argument as Int)
         exam = argument
-        viewModel.tests.observe(viewLifecycleOwner) { a ->
-            a?.let { tests ->
+        viewModel.tests.observe(viewLifecycleOwner, Observer { a->
+            a?.let {tests->
                 myList.addAll(tests)
                 showTestFun()
             }
-        }
+        })
     }
 
     private fun postResultTest(examResult: ExamResult){
@@ -108,7 +111,7 @@ class ExamTestFragment : Fragment() {
         test.testImage?.let {
             Picasso.get().load(it).into(binding.examTestImg)
         }
-        binding.examTestNum.text = (showTest++).toString()
+        binding.examTestNum.text = (showTest + 1).toString()
         binding.examTestQuestion.text = test.testQuestion
         binding.radioGroup21.text = answers[0]
         binding.radioGroup22.text = answers[1]
